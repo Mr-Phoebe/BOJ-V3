@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>{% block title %}{% endblock %}</title>
+        <link href="/static/css/home.css" rel="stylesheet" type="text/css"/>
+        <link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <script src="/static/js/jquery.js"></script>    
+        <script src="/static/js/bootstrap.js"></script>    
+        <script src="/static/js/ajaxSetup.js"></script>    
+        <style type="text/css">
+            .dropdown{
+                width: 150px;
+                text-align:center; 
+            }
+        </style>    
+    </head>
+
+    <body>
+        <div id="main">
+            <div id="main-header">
+                <div class="bs-docs-example" style="position: relative; top: 100px; left:100px;">
+                    <ul class="nav nav-pills">
+                        <li><button class="btn" onclick="javascript:window.location.href='/'" style="position : relative; top: 2px; width : 150px; height: 32px; text-align: center;">主页</button></li>
+                        <li class="dropdown" style="postion:relative; left:1px;">
+                        <a class="btn dropdown-toggle" id="drop4" role="button" data-toggle="dropdown" href="#">Online Judge<b class="caret"></b></a>
+                        <ul id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">常见问题</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">新闻及公告</a></li>
+                        </ul>
+                        </li>
+                        <li class="dropdown">
+                        <a class="btn dropdown-toggle" id="drop5" role="button" data-toggle="dropdown" href="#">题目<b class="caret"></b></a>
+                        <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="/problem/list/1">题目列表</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="/submission/submit/p/1">提交题目</a></li>
+                        </ul>
+                        </li>
+                        <li class="dropdown">
+                        <a class="btn dropdown-toggle" id="drop5" role="button" data-toggle="dropdown" href="#">统计分析<b class="caret"></b></a>
+                        <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">用户排名</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="/submission/status">提交状态</a></li>
+                        </ul>
+                        </li>
+                        <li class="dropdown">
+                        <a class="btn dropdown-toggle" id="drop5" role="button" data-toggle="dropdown" href="#">考试<b class="caret"></b></a>
+                        <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                            {% ifequal user.priv 'student' %}
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'Contest:list_user_contest' 1 %}">我能参加的考试列表</a></li>
+                            {% else %}
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'Contest:list_user_contest_myself' 1 %}">我创建的考试列表</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'Contest:list_user_contest_manage' 1 %}">我管理的考试列表</a></li>
+                            {% endifequal %}
+                        </ul>
+                        </li>
+                        <li class="dropdown">
+                        <a class="btn dropdown-toggle" id="drop5" role="button" data-toggle="dropdown" href="#">课程<b class="caret"></b></a>
+                        <ul id="menu2" class="dropdown-menu" role="menu" aria-labelledby="drop5">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="{% ifequal user.priv "school" %}{% url 'User:show_school' 1 %}{% else %}{% url 'User:show_school' 1 %}{% endifequal %}">课程列表</a></li>
+                        </ul>
+                        </li>
+                    </ul> <!-- /tabs -->
+                </div> 
+            </div>   
+            <div id="main-body">
+                <div id="main-left">{% block main-left %}{% endblock %}</div>
+                <div id="main-right">
+                    {% if user.username %}
+                    用户名:{{ user.username }}
+                    {% endif %}
+                    {% if user.username %}
+                    <p><a href="{% url 'User:showinfo' %}">查看个人信息</a></p>
+                    <p><a href="{% url 'User:update' %}">更新个人信息</a></p>
+                    {% ifequal user.priv 'university' %}
+                    <p><a href="{% url 'User:managestudent' %}">管理学生</a><p>
+                    <p><a href="{% url 'User:manageadmin' %}">管理管理员</a><p>
+                    <p><a href="{% url 'User:manageschool' %}">管理学院</a></p>
+                    <p><a href="{% url 'User:managegroup' %}">管理群组</a></p>
+                    {% else %}
+                    {% ifequal user.priv 'school' %}
+                    学院管理员相关链接 
+                    <p><a href="{% url 'User:listSchool' %}">我所管理的学院</a></p>
+                    {% else %}    
+                    {% ifequal user.priv 'course' %}
+                    课程管理员相关链接
+                    <p><a href="{% url 'Course:listCourse' %}">我所管理的课程</a></p>
+                    {% else %}    
+                    {% ifequal user.priv 'courseclass' %}
+                    课程分班管理员相关链接
+                    <p><a href="{% url 'Course:listCourseClass' %}">我所管理的课程分班</a></p>
+                    {% else %}    
+                    {% ifequal user.priv 'student' %}
+                    学生相关链接    
+                    <p><a href="{% url 'Course:listCourseClass' %}">我所在的课程分班</a></p>
+                    {% endifequal %}
+                    {% endifequal %}
+                    {% endifequal %}
+                    {% endifequal %}
+                    {% endifequal %}
+                    <p><a href="/user/logout">注销</a></p>
+                    {% else %}
+                    <p><a href="/user/login">登录</a></p>
+                    {% endif %}
+
+                    <br/> <br/>
+                    {% block main-right %}{% endblock %}
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+
+            <div id="footer">footer</div>
+        </div>
+    </body>
+</html>
