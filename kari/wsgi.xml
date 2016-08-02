@@ -1,0 +1,9 @@
+<uwsgi>
+    <socket>/home/buptacm/oj/kari/kari.sock</socket>
+    <chdir>/home/buptacm/oj/kari</chdir>
+    <module>wsgi</module>
+    <gevent>100</gevent>
+    <processes>8</processes>
+    <chmod-socket>666</chmod-socket>
+    <master/>
+</uwsgi>

@@ -1,0 +1,10 @@
+<h> {{ prob_name }} </h>
+<p> Accepted: {{ ac_user_num }} Submit: {{ sub_user_num }} </p><br/>
+<p> Time Limit: {{ prob_time }} Memory Limit: {{ prob_memory }} </p><br/>
+{% if is_spj %}
+<p> Special Judge </p><br/>
+{% endif %}
+<br/>
+<p> {{ prob_desc}} </p><br/>
+<br/>
+<a href='{{ submit_addr }}'>Submit</a> <a href='{{ static_addr }}'>Static</a><br/>

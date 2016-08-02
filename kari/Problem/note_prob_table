@@ -1,0 +1,19 @@
+problem table:
+
+pid				int		pri
+prob_priv		int		-	/// 0 private, 1 protected, 2 public ...
+prob_title		varchar	-
+prob_time		int		-
+prob_memory		int		-
+prob_codelength	int		-
+is_spj			int		-
+uid				int		frn
+data_cnt		int		-
+
+
+/*****
+description is based on pid
+data is based on pid
+score is judged by contest model
+difficulty is judged by difficulty model
+*****/
