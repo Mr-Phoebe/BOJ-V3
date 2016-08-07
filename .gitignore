@@ -1,5 +1,8 @@
 *.pyc
 *.txt
+*.exe
 command
+docs
 note_prob_table
+add_list
 framework
