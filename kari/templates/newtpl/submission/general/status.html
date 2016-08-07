@@ -1,0 +1,129 @@
+{% extends "newtpl/base.html" %}
+
+{% block title %}提交状态{% endblock %}
+{% block main %}
+<div class="page-header">
+    <br/>
+    <h1>提交状态 <small>{{ user.username }}</small></h1>
+</div>
+<ul class="nav nav-pills">
+    {#<li><a href="{%url 'Contest:show_contest' c.cid%}">测验首页</a></li> #}
+    <li class="active"><a href="{%url 'Submission:status' %}">提交状态</a></li>
+    {#<li><a href="{%url 'Statistic:boardByAC' c.cid%}">排行榜</a></li>#}
+</ul>
+<form class="form-inline kari-form-inline" method="get">
+    {{form.problem_id}}
+    {{form.username}}
+    {{form.status}}
+    {{form.language}}
+    <input class="btn btn-primary" type="submit" value="筛选">
+    {%if tpl.can_manage %}<a class="btn btn-warning" id="rejudge-btn" url="{{ request.get_full_path }}{% if '?' in request.get_full_path %}&rejudge=1{% else %}?rejudge=1{% endif %}">重判</a>{%endif%}
+    <a class="btn btn-info" href="{% url 'Submission:status' %}">清除筛选</a>
+</form>
+
+{% if general_list and general_list.paginator.num_pages > 1 %}
+<div class="pagination pagination-centered">
+    <ul>
+        {% if general_list.has_previous %}
+        <li><a href="{% url 'Submission:status' general_list.previous_page_number %}?{% for key,value in request.GET.items %}&{{ key }}={{ value }}{% endfor %}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+<!--
+        {% for p in general_list.paginator.page_range %}
+        {% if p == general_list.number %}
+        <li class="disabled"><a href="#">{{ p }}</a></li>
+        {% else %}
+        <li><a href="{% url 'Submission:status' p %}?{% for key,value in request.GET.items %}&{{ key }}={{ value }}{% endfor %}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+        -->
+        {% if general_list.has_next %}
+        <li><a href="{% url 'Submission:status' general_list.next_page_number %}?{% for key,value in request.GET.items %}&{{ key }}={{ value }}{% endfor %}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+
+<hr />
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>ID</th>
+        <th>题号</th>
+        <th>结果</th>
+        <th>时间</th>
+        <th>内存</th>
+        <th>语言</th>
+        <th>代码长度</th>
+        <th>提交时间</th>
+        <th>用户</th>
+        {% if tpl.can_manage %}
+        <th>重判</th>
+        {% endif %}
+    </thead>
+    {% for s in general_list %}
+    {% with idx=s.problem_id %}
+    <tr>
+        {# need modification #}
+        <td>{{ s.id }}</td>
+        <td><a href="{% url 'Problem:problem' idx %}">{{ idx }}</a></td>
+        <td><a href="{% url 'Submission:general_code_and_info' s.id %}" class="{{ s.status_color }}"> {{ s.status_cn }} </a></td>
+        <td>{{ s.run_time }} ms</td>
+        <td>{{ s.run_memory}} KB</td>
+        <td>{{ s.get_code_language_display }}</td>
+        <td><a href="{% url 'Submission:general_code_and_info' s.id %}" > {{ s.code_length}} B</a></td>
+        <td>{{ s.submission_time|date:"Y-m-d H:i:s" }}</td>
+        <td><a href="{% url 'User:viewuser' s.user.uid %}">{{ s.user.username }}</a></td>
+        {% if tpl.can_manage %}
+        {% if s.user.university == user.university %}
+        <td><a href="{% url 'Submission:general_rejudge' s.id %}">提交重判</a></td>
+        {% else %}
+        <td>没有重判权限</td>
+        {% endif %}
+        {% endif %}
+    </tr>
+    {% endwith %}
+    {% endfor %}
+</table>
+
+{% if general_list and general_list.paginator.num_pages > 1 %}
+<div class="pagination pagination-centered">
+    <ul>
+        {% if general_list.has_previous %}
+        <li><a href="{% url 'Submission:status' general_list.previous_page_number %}?{% for key,value in request.GET.items %}&{{ key }}={{ value }}{% endfor %}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+<!--
+        {% for p in general_list.paginator.page_range %}
+        {% if p == general_list.number %}
+        <li class="disabled"><a href="#">{{ p }}</a></li>
+        {% else %}
+        <li><a href="{% url 'Submission:status' p %}?{% for key,value in request.GET.items %}&{{ key }}={{ value }}{% endfor %}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+-->
+        {% if general_list.has_next %}
+        <li><a href="{% url 'Submission:status' general_list.next_page_number %}?{% for key,value in request.GET.items %}&{{ key }}={{ value }}{% endfor %}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
+{% block ext-script %}
+<script src="/static/js/layer/layer.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+            $('a#rejudge-btn.btn.btn-warning').bind('click', function() {
+                layer.confirm('确定重判?', function() {
+                    $.get($('a#rejudge-btn.btn.btn-warning').attr('url'));
+                    layer.close(layer.index);
+                    });
+            });
+    });
+</script>
+{% endblock %}

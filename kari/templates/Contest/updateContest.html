@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %} 修改考试 {% endblock %}
+
+{% block main-left %}
+<script src="/static/js/contest.js"></script>    
+<form action="{% url 'Contest:update_contest' cid %}" method="POST" enctype="multipart/form-data" onSubmit="return checkAllProblem()">
+{% csrf_token %}
+<table class="table table-bordered">
+{{ form.as_table }}
+</table>
+<table class="table table-bordered" id="problem_table">
+<tbody>
+<tr>
+<th width="10%" class="problem_modify"><button type="button" onclick="addProb()" {% if started %} disabled {% endif %}>添加</button></th>
+<th width="30%">题目ID</th>
+<th width="30%" class="problem_title_custom">自定义标题</th>
+<th width="30%" class="problem_title">默认标题</th>
+</tr>
+{% for p in problem_list %}
+<tr id="problem_{{ p.idx }}">
+<td class="problem_modify"><button type="button" onclick="delProb({{ p.idx }})" {% if started %} disabled {% endif %}>删除</button></td>
+<td><input type="text" name="problem_id" id="problem_id_{{ p.idx }}" onchange="checkProblem({{ p.idx }})" value="{{ p.pid }}" autocomplete="off" {% if started %} readonly {% endif %}></td>
+<td><input type="text" name="problem_title_custom" id="problem_title_custom_{{ p.idx }}" value="{{ p.title }}"></td>
+<td><class="problem_title" id="problem_title_{{ p.idx }}">{{ p.title }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<input type="submit" value="提交">
+</form>
+{% endblock %}
+
+{% block main-right %}
+<p><a href="{% url 'Contest:show_contest' cid %}"> 返回考试 </a></p>
+<p><a href="{% url 'Contest:list_contest' ccid 1 %}"> 考试列表 </a></p>
+{% endblock %}

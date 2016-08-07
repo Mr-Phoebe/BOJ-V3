@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %} 用户信息 {% endblock %}
+
+{% block main-left %}
+
+<h1>用户信息</h1>
+<p> 用户名: {{ utov.username }} </p>
+<p> 昵称: {{ utov.nickname }} </p>
+<p> Email: {{ utov.email }} </p>
+<p> 性别: {{ utov.gender }} </p>
+<p> 学校: {{ utov.university.fullname }} </p>
+<p> 学院: {{ utov.school.fullname }} </p>
+<p> 级别: {{ utov.priv }} </p>
+{% if utov.priv == 'student' %}
+    <p> 
+    班级:
+    {% for g in utov.group_set.all %}
+        {{ g.name }}&nbsp;
+    {% endfor %}
+    </p>
+{% endif %}
+
+{% endblock %}
+
+{% block main-right %}
+{% endblock %}

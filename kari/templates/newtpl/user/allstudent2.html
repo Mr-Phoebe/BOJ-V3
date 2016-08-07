@@ -1,0 +1,27 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %}学生列表{% endblock %}
+{% block page-header%}
+<h1>学生列表 <small>{{user.university.fullname}}</small></h1>
+{% endblock %}
+
+{% block admin-form%}
+<table class="table table-bordered table-striped table-hover">
+    <thead><tr>
+        <th>用户名</th>
+        <th>修改</th>
+    </tr></thead>
+    <tbody>
+        {% for u in allstudent %}
+    <tr>
+        <td>{{u.username}}</td>
+        <td><a href="/user/viewuser/{{u.uid}}">修改</a></td>
+    </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block admin-access %}
+<a class="btn btn-primary btn-block" href="{%url 'User:addstudent' %}">批量导入学生</a>
+{% endblock %}

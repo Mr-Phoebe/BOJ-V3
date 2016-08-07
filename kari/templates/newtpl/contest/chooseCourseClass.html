@@ -1,0 +1,21 @@
+{% extends "newtpl/admin.html" %}
+{% block title %}添加题目{% endblock %}
+{% block page-header %}
+    <h1>添加题目</h1>
+{% endblock %}
+
+{%block admin-form%}
+<h2>请选择测验所属的课程分班</h2>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>ID</th>
+        <th>分班名称</th>
+    </thead>
+    {% for cc in list %}
+    <tr>
+        <td>{{ cc.id }}</a></td>
+        <td><a href="{%url 'Contest:add_contest' cc.id %}">{{ cc.name }}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{%endblock%}

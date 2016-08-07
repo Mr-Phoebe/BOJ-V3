@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %} 查看提交详情{% endblock %}
+
+{% block main-left %}
+
+<h3>查看提交详情</h3>
+<p> 结果: {{ info.status }}</p>
+<p> 运行时间: {{ info.run_time }} ms 占用内存: {{ info.run_memory }} kb
+<p>{% if "ce" in info %} {{ info.ce }} {% endif %}</p>
+<p>数据组数：{{ info.data_cnt }}</p>
+{% if "case_judged" in info %}
+<p>已判组数：{{ info.case_judged }} 总分：{{ info.score }} </p> 
+{% if info.case_result %}
+{% for seq in info.case_result %}
+<p>第{{ forloop.counter }}组结果: {{ seq.res }} 运行时间: {{ seq.time }} ms 占用内存: {{ seq.mem }} kb</p>
+{% endfor %}
+{% endif %}
+{% endif %}
+
+{% endblock %}
+
+{% block main-right %}
+
+{% endblock %}

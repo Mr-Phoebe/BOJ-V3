@@ -1,0 +1,50 @@
+{% extends "newtpl/fresh/base.html" %}
+{% block title %}所有队伍{% endblock %}
+{% block main %}
+<style>
+    body {
+    }
+</style>
+<div class="team-info">
+    <table class="table table-hover">
+        <tr>
+            <th>Num</th>
+            <th>队伍</th>
+            <th>状态</th>
+            <th>成员1</th>
+            <th>性别1</th>
+            <th>年级1</th>
+            <th>学号1</th>
+            <th>手机1</th>
+            <th>邮箱1</th>
+            <th>成员2</th>
+            <th>性别2</th>
+            <th>年级2</th>
+            <th>学号2</th>
+            <th>手机2</th>
+            <th>邮箱2</th>
+            <th>成员3</th>
+            <th>性别3</th>
+            <th>年级3</th>
+            <th>学号3</th>
+            <th>手机3</th>
+            <th>邮箱3</th>
+        </tr>
+        {% for team in teams %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ team.info.name }}</td>
+            <td>{{ team.info.status }}</td>
+            {% for member in team.members %}
+            <td>{{ member.name }}</td>
+            <td>{{ member.gender }}</td>
+            <td>{{ member.grade }}</td>
+            <td>{{ member.student_id }}</td>
+            <td>{{ member.mobile }}</td>
+            <td>{{ member.email }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% block board_body %}
+    {% for person in rank %}
+        {% if person.sub > 0 %}
+        <tr>
+            <td>{{person.rank}}</td>
+            <td>{{person.username}}{% if person.nickname %}<br>{{ person.nickname }}{% endif %}</td>
+            <td>{{person.ac}}</td>
+            <td>{{person.pen}}</td>
+            {%for pinfo in person.pinfo%}
+            <td class="{%if pinfo.ac > 0%}{%if pinfo.fb%}kari-board-fb{%else%}kari-board-ac{%endif%}{%elif pinfo.ac < 0%}kari-board-noac{%endif%}">
+                    {{pinfo.ac}}
+                    {%if pinfo.ac > 0%}({{pinfo.ac_time}}{%if pinfo.sub > 1 %}+20*{{pinfo.sub|add:"-1"}}{%endif%})
+                {%endif%}
+            </td>
+            {%endfor%}
+        </tr>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

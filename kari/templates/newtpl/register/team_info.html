@@ -1,0 +1,36 @@
+{% extends "newtpl/register/base.html" %}
+{% block title %}信息 - {{ target_team.name }}{% endblock %}
+{% block main %}
+<div class="team-info">
+    <h1>{{ target_team.name }}<br>
+        <small>状态：
+            {% if target_team.status == "Failed" %}审核未通过
+            {% elif target_team.status == "Accepted" %}审核通过
+            {% elif target_team.status == "Starred" %}允许打星
+            {% elif target_team.status == "Finals" %}决赛队伍
+            {% else %}等待审核
+            {% endif %}
+        </small>
+        <hr />
+    </h1>
+    <div class="button">
+        <a href="{% url 'Register:add_member' target_team.pk %}" class="btn btn-warning">完善信息</a>
+        <a href="{% url 'Register:reset_passwd' target_team.pk %}" class="btn btn-success">修改密码</a>
+        <a href="{% url 'Register:team_logout' %}" class="btn btn-info">登出</a>
+        <p class="muted">新注册的队员须点击上方橙色按钮完善个人信息！</p>
+        <p class="muted">注：审核未通过时仍可修改信息重新等待审核。</p>
+    </div>
+    {% for member in members %}
+    <h2>队员 {{ forloop.counter }}</h2>
+    <p>姓名：{{ member.name }}</p>
+    <p>性别：{{ member.gender }}</p>
+    <p>学院：{{ member.school }}</p>
+    <p>班级：{{ member.class_id }}</p>
+    <p>学号：{{ member.student_id }}</p>
+    <p>手机：{{ member.mobile }}</p>
+    <p>Email：{{ member.email }}</p>
+    <p>个人介绍：{{ member.info }}</p>
+    <a href="{% url 'Register:modify_member' member.pk %}" class="btn btn-success">修改信息</a>
+    {% endfor %}
+</div>
+{% endblock %}

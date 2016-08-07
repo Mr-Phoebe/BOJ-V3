@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %} 课程{{ course.name }}信息 {% endblock %}
+
+{% block main-left %}
+{% if fake %}
+<div class="pagination">
+    {% if contestList.has_previous %}
+    <a href="/Contest/list/{{ contestList.previous_page_number }}/" title="Pre">上一页</a>
+    {% endif %}
+    {% for p in page_range %}
+    {% ifequal p contestList.number %}
+    <span style="font-size:16px;" title="当前页"><b>{{ p }}</b></span>        
+    {% else %}
+    <a href="/Contest/list/{{ p }}/" title="第{{ p }}页">{{ p }}</a>
+    {% endifequal %}
+    {% endfor %}     
+    {% if contestList.has_next %}
+    <a href="/Contest/list/{{ contestList.next_page_number }}/" title="Next">下一页</a>
+    {% endif %}  
+    <b>
+        {%if contestList.paginator.num_pages %}
+        共 {{ contestList.paginator.num_pages }} 页
+        {% endif %}
+    </b>
+</div>
+{% endif %}
+<h2> 课程{{ course.name }} </h2>
+<h3> 编号：{{ course.no }} </h3>
+<h3> 所属学院：{{ course.school.name }} </h3>
+<h3> 管理员：{% if course.admin %}<a href="{% url 'User:viewuser' course.admin.uid %}" target="blank">{{ course.admin }}</a>{% else %} 无 {% endif %} {% if template_tags.can_set_admin %}<a href="{% url 'Course:setCourseAdmin' course.id %}">修改</a>{% endif %} </h3>
+<h3> 分班列表：共{{ course_classes|length }}个分班 </h3>
+<table class="table table-striped table-bordered">
+    <th width="10%">ID</th>
+    <th width="10%">名称</th>
+    <th width="10%">开设年份</th>
+    <th width="{% if template_tags.can_set_admin %}20%{% else %}10%{% endif %}">管理员</th>
+    {#<th width="10%">考试列表</th>#}
+    {#% if template_tags.is_course_class_admin %}<th width="10%">添加课程考试</th>{% endif %#}
+    {% if template_tags.can_modify %}
+    <th width="10%">修改分班</th>
+    <th width="10%">删除分班</th>
+    {#<th width="10%">管理群组</th>#}
+    {% endif %}
+    {% for course_class in course_classes %}
+    <tr>
+        <td> {{ forloop.revcounter }} </td>
+        <td><a href="{% url 'Course:showCourseClass' course_class.id %}"> {{ course_class.name }} </a></td>
+        <td> {{ course_class.year }} </td>
+        <td><a href="{% url 'User:viewuser' course_class.admin.uid %}"> {{ course_class.admin }} </a></td>
+        {#<td><a href="{% url 'Contest:list_contest' course_class.id 1 %}">考试列表</a></td>#}
+        {% if template_tags.can_modify %}
+        <td><a href="{% url 'Course:updateCourseClass' course_class.id %}"> 修改分班 </a></td>
+        <td><a href="{% url 'Course:deleteCourseClass' course_class.id %}"> 删除分班 </a></td>
+        {#<td><a href="{% url 'Course:groups' course_class.id %}"> 管理群组 </a></td>#}
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+<h3> 课程题目列表：共{{ problems|length }}道题目 </h3>
+<table class="table table-striped table-bordered">
+    <th width="10%">ID</th>
+    <th width="10%">名称</th>
+    <th width="10%">属性</th>
+    {% for problem in problems %}
+    <tr>
+        <td> {{ forloop.revcounter }} </td>
+        <td><a href="{% url 'Problem:problem' problem.pid %}"> {{ problem.prob_title }} </a></td>
+        <td> {{ problem.prob_priv }} </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+{% block main-right %}
+{% if template_tags.can_modify %}
+<p><a href="{% url 'Course:updateCourse' course.id %}"> 修改课程 </a></p>
+<p><a href="{% url 'Course:deleteCourse' course.id %}"> 删除课程 </a></p>
+<p><a href="{% url 'Course:addCourseClass' course.id %}"> 添加分班 </a></p>
+{% endif %}
+<p><a href="{% url 'Problem:addproblem' %} {#course.id %#}"> 添加题目 </a></p>
+{% ifequal user.priv "course" %}
+<p><a href="{% url 'Course:listCourse' %}"> 返回我管理的课程列表 </a></p>
+{% else %}
+<p><a href="{% url 'User:show_school' course.school.id %}"> 返回学院 </a></p>
+{% endifequal %}
+{% endblock %}

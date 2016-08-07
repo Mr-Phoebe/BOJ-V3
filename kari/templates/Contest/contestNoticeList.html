@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %} 考试公告列表 {% endblock %}
+
+{% block main-left %}
+<table class="table table-striped table-bordered">
+<tr>
+<th width="10%">公告编号</th>
+<th width="80%">名称</th>
+{% if has_priv %}
+<th width="10%">修改公告</th>
+{% endif %}
+{% for cn in contest_notice_list %}
+<tr>
+<td> {{ cn.id }} </td>
+<td><a href="{% url 'Contest:show_contest_notice' cid cn.id %}"> {{ cn.notice_title }} </td>
+{% if has_priv %}
+<td><a href="{% url 'Contest:update_contest_notice' cid cn.id %}"> 修改公告 </td>
+{% endif %}
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
+
+{% block main-right %}
+<p><a href="{% url 'Contest:show_contest' cid %}"> 返回考试 </a></p>
+{% if has_priv %}
+<p><a href="{% url 'Contest:add_contest_notice' cid %}"> 添加考试公告 </a></p>
+{% endif %}
+{% endblock %}

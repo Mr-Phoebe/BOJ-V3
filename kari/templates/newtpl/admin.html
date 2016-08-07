@@ -1,0 +1,53 @@
+{% extends 'newtpl/base.html' %}
+
+{% block main-left %}
+
+<div class="page-header">
+    {%block page-header %}
+    {%endblock page-header%}
+</div>
+
+{% block admin-form %}
+{% endblock admin-form %}
+
+{% endblock main-left %}
+
+{% block main-right %}
+
+<div class="well">
+{%block admin-access%}
+{%endblock admin-access%}
+</div>
+
+{%block admin-ext%}
+{%endblock%}
+
+<div class="well">
+{%block admin-entry%}
+<h3>管理</h3>
+
+{%with pr=user.priv%}
+{%if pr == 'university'%}
+<a class="btn btn-block" href="{%url 'User:manageadmin'%}">管理员</a>
+{%endif%}
+{%if pr == 'university'%}
+<a class="btn btn-block" href="{%url 'User:managestudent'%}">学生</a>
+{%endif%}
+{%if pr == 'university'%}
+<a class="btn btn-block" href="{%url 'User:managegroup'%}">班级</a>
+{%endif%}
+{%if pr == 'university' or pr == 'school'%}
+<a class="btn btn-block" href="{%url 'User:manageschool'%}">学院</a>
+{%endif%}
+{%if pr == 'university' or pr == 'school' or pr == 'course'%}
+<a class="btn btn-block" href="{% url 'Course:courses' %}">课程</a>
+{%endif%}
+{%endwith%}
+
+<a class="btn btn-block" href="{% url 'Course:classes' %}">课程分班</a>
+<a class="btn btn-block" href="{%url 'Problem:manage' %}">题目</a>
+<a class="btn btn-block" href="{% url 'Contest:list_user_contest_manage' %}">测验</a>
+{%endblock admin-entry%}
+</div>
+
+{% endblock main-right %}

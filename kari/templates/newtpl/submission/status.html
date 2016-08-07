@@ -1,0 +1,161 @@
+{% extends "newtpl/base.html" %}
+{% block title %}结果列表 {{c.contest_title}}{% endblock %}
+
+{% block main %}
+<style>
+    body {
+        padding-top:60px;
+        padding-bottom:40px;
+    }
+</style>
+<div class="page-header">
+    <h1>结果列表
+        <small>{{c.contest_title}}</small>
+    </h1>
+</div>
+
+<ul class="nav nav-pills">
+    <li><a href="{%url 'Contest:show_contest' c.cid%}">测验首页</a></li>
+    <li class="active"><a href="{%url 'Submission:contest_status' c.cid%}">结果列表</a></li>
+    <li><a href="{%url 'Contest:view_all_clars' c.cid%}">提问列表</a></li>
+    <li><a href="{%url 'Statistic:boardByAC' c.cid%}">排行榜</a></li>
+</ul>
+<form class="form-inline kari-form-inline" method="get">
+    {{form.problem_index}}
+    {{form.username}}
+    {{form.status}}
+    {{form.language}}
+    <input class="btn btn-primary" type="submit" value="筛选">
+    {%if tpl.can_manage %}<a class="btn btn-warning" id="rejudge-btn" url="{{ request.get_full_path }}{% if '?' in request.get_full_path %}&rejudge=1{% else %}?rejudge=1{% endif %}">重判</a>{%endif%}
+    <a class="btn btn-info" href="{% url 'Submission:contest_status' c.cid %}">清除筛选</a>
+</form>
+
+{% if sList and sList.paginator.num_pages > 1 %}
+<div class="pagination pagination-centered">
+    <ul>
+        {% if sList.has_previous %}
+        <li><a href="{% url 'Submission:contest_status' c.cid sList.previous_page_number %}?{% for key,value in request.GET.items %}&{{ key }}={{ value }}{% endfor %}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% for p in sList.paginator.page_range %}
+        {% if p == sList.number %}
+        <li class="disabled"><a href="#">{{ p }}</a></li>
+        {% else %}
+        <li><a href="{% url 'Submission:contest_status' c.cid p %}?{% for key,value in request.GET.items %}&{{ key }}={{ value }}{% endfor %}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if sList.has_next %}
+        <li><a href="{% url 'Submission:contest_status' c.cid sList.next_page_number %}?{% for key,value in request.GET.items %}&{{ key }}={{ value }}{% endfor %}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+{%comment%}
+{% if sList.paginator.num_pages > 1 %}
+<ul>
+    {% if sList.has_previous %}
+    <li><a href="#">&laquo;</a></li>
+    {% else %}
+    <li class="disabled"><a href="#">&laquo;</a></li>
+    {% endif %}
+
+    {% for p in sList.paginator.page_range %}
+    {% if p == sList.number %}
+    <li class="disabled"><a href="#">{{ p }}</a></li>
+    {% else %}
+    <li><a href="#">{{ p }}</a></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if sList.has_next %}
+    <li><a href="#">&raquo;</a></li>
+    {% else %}
+    <li class="disabled"><a href="#">&raquo;</a></li>
+    {% endif %}
+</ul>
+</div>
+{% endif %}
+{%endcomment%}
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>ID</th>
+        <th>题号</th>
+        <th>结果</th>
+        <th>时间</th>
+        <th>内存</th>
+        <th>语言</th>
+        <th>代码长度</th>
+        <th>提交时间</th>
+        <th>用户</th>
+        {% if tpl.can_manage %}
+	<th>重判</th>
+	{% endif %}
+    </thead>
+    {% for s in sList %}
+    {% with idx=s.problem_index.problem_index %}
+    <tr>
+        <td>{{ s.sid }}</td>
+        <td><a href="{% url 'Problem:contest_problem' c.cid idx %}">{{ idx }}</a></td>
+        <td><strong><a href="{% url 'Submission:code_and_info' s.sid %}" class="{{ s.status_color }}"> {{ s.status_cn }} </a></strong></td>
+        <td><span class="">{{ s.run_time }} ms</span></td>
+        <td>{{ s.run_memory}} KB</td>
+        <td>{{ s.get_code_language_display }}</td>
+        <td><a href="{% url 'Submission:code_and_info' s.sid %}" > {{ s.code_length}} B</a></td>
+        <td>{{ s.submission_time|date:"Y-m-d H:i:s" }}</td>
+        
+        <td><a href="{% url 'User:viewuser' s.user.uid %}">{{ s.user.username }}</a></td>
+        {% if tpl.can_manage %}
+       {# <td><input type="button" class="btn btn-warning" onclick="show_confirm('/submission/rejudge/in_contest/{{s.sid}}/')" value="提交重判"/></td>#}
+       <td><a href="{% url 'Submission:contest_rejudge' s.sid %}" >提交重判</a></td>
+        {% endif %}
+    </tr>
+    {% endwith %}
+    {% endfor %}
+</table>
+
+{% if sList and sList.paginator.num_pages > 1 %}
+<div class="pagination pagination-centered">
+    <ul>
+        {% if sList.has_previous %}
+        <li><a href="{% url 'Submission:contest_status' c.cid sList.previous_page_number %}?{% for key,value in request.GET.items %}&{{ key }}={{ value }}{% endfor %}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% for p in sList.paginator.page_range %}
+        {% if p == sList.number %}
+        <li class="disabled"><a href="#">{{ p }}</a></li>
+        {% else %}
+        <li><a href="{% url 'Submission:contest_status' c.cid p %}?{% for key,value in request.GET.items %}&{{ key }}={{ value }}{% endfor %}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if sList.has_next %}
+        <li><a href="{% url 'Submission:contest_status' c.cid sList.next_page_number %}?{% for key,value in request.GET.items %}&{{ key }}={{ value }}{% endfor %}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block ext-script %}
+<script src="/static/js/layer/layer.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+            $('a#rejudge-btn.btn.btn-warning').bind('click', function() {
+                layer.confirm('确定重判?', function() {
+                    $.get($('a#rejudge-btn.btn.btn-warning').attr('url'));
+                    layer.close(layer.index);
+                    });
+            });
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+m{% extends "base.html" %}
+
+{% block title %} 群组管理 {% endblock %}
+
+{% block main-left %}
+<h3>群组列表</h3>
+{% for g,c in groups %}
+    <h5> {{g.name}} </h5> <a href="/user/modify/group/{{g.id}}">修改</a>
+    <p>所属学院：{{g.school.name}} </p>
+    <p>组员人数：{{ c }}
+{% endfor %}
+<p><a href="/user/add/group">添加群组</a></p>
+{% endblock %}
+
+{% block main-right %}
+{% endblock %}

@@ -1,0 +1,5 @@
+{% extends "newtpl/base.html" %}
+{% block title %}出错啦 - kAri Online Judge{% endblock %}
+{% block main %}
+{% include 'newtpl/err_div.html' with err_title='出错啦' err_img='/static/newtpl/img/err_error.png' err_buglist=True%}
+{% endblock %}

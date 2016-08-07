@@ -1,0 +1,41 @@
+{%extends "newtpl/admin.html" %}
+{%block title%}代码查重题目选择{%endblock%}
+{%block page-header%}
+<h1>代码查重题目选择 <small>{{contest.contest_title}}</small></h1>
+{%endblock page-header%}
+{%block admin-access%}
+<a class="btn btn-primary btn-block" href="{%url 'Contest:show_contest' contest.cid%}">&laquo;返回测验</a>
+{%endblock%}
+{%block admin-form%}
+<form ID="res" class="form-horizontal" onsubmit="postRequest(); return false;">
+    {%csrf_token%}
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label">题目选择</label>
+            {{form.contest_problem.errors}}
+            <div class="controls">
+                {{form.contest_problem}}
+            </div>
+        </div>
+    </fieldset>
+    <div class="form-actions">
+        <input id="submit" class="btn btn-primary" type="submit" value="查看结果">
+        <input class="btn" type="reset" value="重置">
+    </div>
+</form>
+<script type="text/javascript">
+    function postRequest() {
+        document.querySelector('#submit').disabled = true;
+        alert("完成查重后将自动跳转，请耐心等待...");
+        $.ajax({
+            type: "POST",
+            url: "{%url 'Cheat:add_cheat_record' contest.cid%}",
+            data: $('#res').serialize(),
+            success: function() {
+                window.location.href = "{%url 'Cheat:show_cheat_result' contest.cid%}";
+            },
+            timeout: function() { $.ajax(this); }
+        });
+    }
+</script>
+{%endblock admin-form%}

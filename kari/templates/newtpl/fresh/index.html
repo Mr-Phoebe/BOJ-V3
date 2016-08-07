@@ -1,0 +1,21 @@
+{% extends "newtpl/register/base.html" %}
+<style>
+    .note {
+        font-weight: bold;
+        font-size: 12px;
+    }
+</style>
+{% block title %}首页{% endblock %}
+{% block main %}
+      <div class="jumbotron">
+        <h1>2015年新生赛</h1>
+        <hr />
+        <p class="lead">2015年北京邮电大学集训队新生选拔赛已经开始报名，所有正式注册的22014级本科生均可报名参赛。</p>
+        <p class="lead">报名截止时间：3月14日（周五） 14:00</p>
+        <p class="lead">比赛时间：3月15日（周日） 13:00-18:00</p>
+        <p class="lead">比赛详细信息请关注<a href="http://bbs.byr.cn/#!article/ACM_ICPC/77325">北邮人论坛算法版</a></p>
+        <p class="note">报名后请记得添加个人信息</p>
+        <a class="btn btn-large btn-success" href="{% url 'Fresh:team_register'%}">报名</a>
+        <a class="btn btn-large btn-info" href="{% url 'Fresh:team_login' %}">修改信息</a>
+      </div>
+{% endblock %}

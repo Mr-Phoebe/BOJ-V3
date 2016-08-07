@@ -1,0 +1,43 @@
+{% extends "newtpl/base.html" %}
+{% block title %} 提问列表 {% endblock %}
+{% block main %}
+<div class="page-header">
+    <h1>提问列表<small> {{ contest.contest_title }}</small></h1>
+    {% if can_add_clar %}
+    <a class="btn pull-right" href="{% url 'Contest:add_clar' contest.cid %}">添加提问</a>
+    {%endif%}
+    <a class="btn btn-primary pull-right" href="{% url 'Contest:show_contest' contest.cid %}">返回测验</a>
+</div>
+<ul class="nav nav-pills">
+    <li><a href="{%url 'Contest:show_contest' contest.cid%}">测验首页</a></li>
+    <li><a href="{%url 'Submission:contest_status' contest.cid%}">结果列表</a></li>
+    <li class="active"><a href="{%url 'Contest:view_all_clars' contest.cid%}">提问列表</a></li>
+    <li><a href="{%url 'Statistic:boardByAC' contest.cid%}">排行榜</a></li>
+</ul>
+
+    <table class="table table-hover">
+        <thead>
+            <th width="10%">Contestant</th>
+            <th>Questions</th>
+            <th>Answers</th>
+            {% if can_update_clar %}
+            <th width="10%">Answer</th>
+            <th width="10%">Delete</th>
+            {% endif %}
+        </thead>
+        {% for cs in clars %}
+        <tr>
+            <td>{{ cs.author.username }}</td>
+            <td>{{ cs.question }}</td>
+            <td>{{ cs.answer }}</td>
+            {% if can_update_clar %}
+            <td><a href="{% url 'Contest:answer_clar' cs.pk %}" class="btn btn-success">回答</a></td>
+            <td><a href="{% url 'Contest:delete_clar' cs.pk %}" class="btn btn-warning">删除</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
+{% block main-right %}
+{% endblock %}

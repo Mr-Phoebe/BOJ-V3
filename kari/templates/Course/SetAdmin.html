@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %} 设置{% if course %}课程{% else %}课程分班{% endif %}管理员{% endblock %}
+
+{% block main-left %}
+
+<h3>{% if course %}课程 {{ course.name }}{% else %}课程分班 {{ course_class.name }}{% endif %}</h3>
+<h4>当前管理员： {% if course %}{% if course.admin %}{{ course.admin }}{% else %}无{% endif %}{% else %}{% if course_class.admin %}{{ course_class.admin }}{% else %}无{% endif %}{% endif %}</h4>
+<form action="{% if course %}{% url 'Course:setCourseAdmin' course.id %}{% else %}{#% url 'Course:setCourseClassAdmin' course_class.id %#}{% endif %}" method="POST">
+    {%csrf_token%}
+    {% if course %}课程{% else %}课程分班{% endif %}管理员：<select name="admin">
+        {% for admin in users %}
+        <option value="{{admin.uid}}"> {{admin.username}} </option>
+        {%endfor%}
+    </select>
+    <p><input type="submit" value="提交" /></p>
+</form>
+{% endblock %}
+
+{% block main-right %}
+<p><a href="{% if course %}{% url 'Course:showCourse' course.id %}{% else %}{% url 'Course:showCourseClass' course_class.id %}{% endif %}">返回课程{% if course_class %}分班{% endif %}</a></p>
+
+{% endblock %}

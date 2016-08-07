@@ -1,0 +1,16 @@
+{% extends "newtpl/base.html" %}
+{% block title %} 添加提问 {% endblock %}
+{% block main %}
+<div class="page-header">
+    <h1>添加提问<small> - {{ contest.contest_title }}</small></h1>
+    <a class="btn btn-primary pull-right" href="{% url 'Contest:show_contest' contest.cid %}">返回测验</a>
+</div> 
+<form method="POST">
+    {% csrf_token %}
+    <textarea rows="4" class="span7" name="question" required></textarea>
+    <hr />
+    <button type="submit" class="btn btn-large btn-success">提交问题</button>
+</form>
+{% endblock %}
+{% block main-right %}
+{% endblock %}

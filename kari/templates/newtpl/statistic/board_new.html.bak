@@ -1,0 +1,56 @@
+{% extends "newtpl/base.html" %}
+{% block title %}排行榜{% endblock %}
+
+{% block main %}
+
+<div class="page-header">
+    {%if tpl.has_priv %}
+    <a class="btn btn-info pull-right" href="{% url 'Course:showCourseClassContests' contest.course_class.id %}">&laquo;返回分班</a>
+    <a class="btn pull-right" href="{% url 'Contest:add_contest_notice' contest.cid %}">添加公告</a>
+    <a class="btn btn-primary pull-right" href="{% url 'Contest:update_contest' contest.cid %}">修改测验</a>
+    {%endif%}
+    <h1>排行榜
+        <small>{{contest.contest_title}}</small>
+    </h1>
+</div>
+<ul class="nav nav-pills">
+    <li><a href="{%url 'Contest:show_contest' contest.cid%}">测验首页</a></li>
+    <li><a href="{%url 'Submission:contest_status' contest.cid%}">结果列表</a></li>
+    <li><a href="{%url 'Contest:view_all_clars' contest.cid%}">提问列表</a></li>
+    <li class="active"><a href="{{request.get_full_path}}">排行榜</a></li>
+</ul>
+{%if tpl.has_priv or contest.status != 'scheduled'%}
+<div>
+    <table class="table table-bordered table-striped table-hover table-condensed">
+    <thead>
+        <th width="10%">排名</th>
+        <th width="14%">用户</th>
+        <th width="8%">{% if contest.board_type == 1 %}得分{% else %}题数{% endif %}</th>
+        <th width="8%">罚时</th>
+        {%for pinfo in allProb%}
+        <th>{{pinfo.problem_index}}</th>
+        {%endfor%}
+    </thead>
+    {% for person in rank %}
+    {% if person.sub > 0 %}
+        <tr>
+            <td>{{person.rank}}</td>
+            <td>{{person.username}}{% if person.nickname %}<br>{{ person.nickname }}{% endif %}</td>
+            <td>{{person.ac}}</td>
+            <td>{{person.pen}}</td>
+            {%for pinfo in person.pinfo%}
+            <td class="{%if pinfo.ac > 0%}{%if pinfo.fb%}kari-board-fb{%else%}kari-board-ac{%endif%}{%elif pinfo.ac < 0%}kari-board-noac{%endif%}">
+                    {{pinfo.ac}}
+                    {%if pinfo.ac > 0%}({{pinfo.ac_time}}{%if pinfo.sub > 1 %}+20*{{pinfo.sub|add:"-1"}}{%endif%})
+                {%endif%}
+            </td>
+            {%endfor%}
+        </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+</div>
+{%endif%}
+{% endblock %}
+{% block ext-script %}
+{% endblock %}

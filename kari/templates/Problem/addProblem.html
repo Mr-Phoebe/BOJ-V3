@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %} 添加题目 {% endblock %}
+
+{% block main-left %}
+<script src="/static/js/problem.js"></script>
+<script src="/static/ckeditor/ckeditor.js"></script>
+<form action="{% url 'Problem:addcommit' %}" method="POST" enctype="multipart/form-data" onSubmit="return checkAllData()">
+    {% csrf_token %}
+    <table class="table table-bordered">
+        {{ form.as_table }}
+    </table>
+    <table class="table table-bordered" id="data_table">
+        <tr>
+            <th width="10%" class="data_modifiy">
+                <button type="button" onclick="addData()">添加</button>
+            </th>
+            <th width="40%" class="data_in">输入数据文件
+            </th>
+            <th width="40%" class="data_out">输出数据文件
+            </th>
+            <th width="10%" class="data_scr">数据得分
+            </th>
+        </tr>
+    </table>
+    <input type="submit" value="提交">
+</form>
+{% endblock %}
+
+{% block main-right %}
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %}{{ school.fullname }}{% endblock %}
+
+{%block page-header%}
+<h1>{{ school.fullname }} <small>{{ school.university.name }}</small></h1>
+{%endblock%}
+
+{% block admin-form %}
+
+{% block detailed_info %}
+<div id="contest_info"> {# need modification #}
+    <div class="kari-head-info">
+        <span><strong>所属学校 </strong>{{ school.university.fullname }}</span>
+        <span><strong>管理员 </strong>{% if school.admin %}{{ school.admin.username }}{% else %}无{% endif %}</span>
+    </div>
+</div>
+{% endblock %}
+
+{% if course_list and course_list.paginator.num_pages > 1 %}
+{# we should put 'if' in the 'block', or the 'if' would not be rendered #}
+<div class="pagination pagination-centered">
+    <ul>
+        {% if course_list.has_previous %}
+        <li><a href="{% url 'Course:courses' course_list.previous_page_number %}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% for p in course_list.paginator.page_range %}
+        {% if p == course_list.number %}
+        <li class="disabled"><a href="#">{{ p }}</a></li>
+        {% else %}
+        <li><a href="{% url 'Course:courses' p %}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if course_list.has_next %}
+        <li><a href="{% url 'Course:courses' course_list.next_page_number %}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+<table class="table table-bordered table-striped table-hover">
+    <thead><tr>
+        <th>课程编号</th>
+        <th>课程名称</th>
+        {% if user.priv != 'course' %}
+        <th>管理员</th>
+        {% endif %}
+        <th>修改</th>
+    </tr></thead>
+    <tbody>
+        {% for c in course_list %}
+        <tr>
+        <td>{{ c.no }}</td>
+        <td><a href="{% url 'Course:showCourse' c.id %}">{{ c.name }}</a></td>
+        {% if c.admin %}
+        <td>{% if user.priv == 'university' %}<a href="{% url 'User:viewuser' c.admin.uid %}">{{ c.admin.username }}</a>{% else %}{{ c.admin.username }}{% endif %}</td>
+        {% else %}
+        <td> 无 </td>
+        {% endif %}
+        <td><a class="btn btn-warning" href="{% url 'Course:updateCourse' c.id %}">修改</a></td>
+        </tr>
+        {%endfor%}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block admin-access %}
+
+{% if tpl.can_modify %}
+<a class="btn btn-warning btn-block" href="{% url 'User:modifyschool' school.id %}">修改学院</a>
+<a class="btn btn-primary btn-block" href="{% url 'Course:addCourse' school.id %}">添加课程</a>
+{% endif %}
+
+<a class="btn btn-info btn-block" href="{% url 'User:manageschool' %}">&laquo;返回学院管理列表</a>
+
+{% endblock %}

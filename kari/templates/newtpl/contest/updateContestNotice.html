@@ -1,0 +1,13 @@
+{% extends "newtpl/base.html" %}
+{% block title %} 修改公告 {% endblock %}
+{% block main-left %}
+<div>
+    <form action="{% url 'Contest:update_contest_notice' cnid cid %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table table-bordered">
+        {{ form.as_table }}
+    </table>
+    <input type="submit" value="提交">
+    </form>
+</div>
+{% endblock %}

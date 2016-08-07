@@ -1,0 +1,68 @@
+{% extends "newtpl/course/course_class_base.html" %}
+{%block page-header%}
+<h1>班级列表 <small>{{course_class.getFullName}}</small></h1>
+{%endblock%}
+
+{% block pagination %}
+{% if group_list and group_list.paginator.num_pages > 1 %}
+{# we should put 'if' in the 'block', or the 'if' would not be rendered #}
+<div class="pagination pagination-centered">
+    <ul>
+        {% if group_list.has_previous %}
+        <li><a href="{% url 'Course:showCourseClassGroups' course_class.id group_list.previous_page_number %}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% for p in group_list.paginator.page_range %}
+        {% if p == group_list.number %}
+        <li class="disabled"><a href="#">{{ p }}</a></li>
+        {% else %}
+        <li><a href="{% url 'Course:showCourseClassGroups' course_class.id p %}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if group_list.has_next %}
+        <li><a href="{% url 'Course:showCourseClassGroups' course_class.id group_list.next_page_number %}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block list_content %}
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>班级号</th>
+        <th>所属学院</th>
+        <th>成员数</th>
+    </thead>
+    {% for group in group_list %}
+    <tr>
+        <td><a href="{% url 'User:modifygroup' group.id %}">{{ group.name }}</a></td>
+        <td>{{ group.school.fullname }}</td>
+        <td>{{ group.users.count }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% if tpl.can_modify %}
+<form action="{% url 'Course:addGroup' course_class.id %}" method="POST">
+    {% csrf_token %}
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label"> 添加班级 </label>
+            <div class="controls">
+                <select id="group_add_id" name="group_add">
+                    {% for g_val, g_id in groups_waiting %}
+                    <option value="{{ g_id }}">{{ g_val }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </fieldset>
+    <input class="btn btn-primary" type="submit" value="提交">
+</form>
+{% endif %}
+{% endblock %}

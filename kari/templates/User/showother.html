@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} 用户信息 {% endblock %}
+
+{% block main-left %}
+
+<h1>用户信息</h1>
+<p> 用户名: {{ user.username }} </p>
+<p> 昵称: {{ user.nickname }} </p>
+<p> Email: {{ user.email }} </p>
+<p> 性别: {{ user.gender }} </p>
+<p> 学校: {{ user.root.root_name }} </p>
+{% endblock %}
+
+{% block main-right %}
+{% endblock %}

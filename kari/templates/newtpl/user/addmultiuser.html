@@ -1,0 +1,30 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %}批量导入学生{% endblock %}
+{% block page-header %}
+<h1>批量导入学生</h1>
+{% endblock %}
+
+{% block admin-form %}
+<form action="/user/add/student/" method="POST">
+    {% csrf_token %}
+    <p>用户名只允许包含a-z, 0-9以及下划线！<br/>
+    您的用户名会被自动添加上 "{{univ_name}}#" 的前缀 </p>
+    <p>所属学院：</p>
+    <select name="school">
+    {% for s in schools %}
+       <option value="{{s.name}}">{{s.fullname}}</option>
+    {% endfor %}
+    </select>
+    <p>在文本框中输入用户名，密码，学生姓名（后两项可省略）每行一个:<br/>
+    详情参见
+    <a href="/whitepaper">用户手册</a>
+    </p> 
+    <textarea name="usernames" rows="10" cols="100"></textarea>
+    <p><input type="submit" value="提交" /></p>
+</form>
+{% endblock %}
+
+{% block admin-access %}
+<a class='btn btn-block' href='/user/manage/student/'>返回学生列表</a>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %} 用户列表 {% endblock %}
+
+{% block main-left %}
+<h1>用户列表</h1>
+<H3>管理员：</h3>
+{% for u in alladmin %}
+    <p> {{ u.username }} </p>
+{% endfor %}
+<h3>普通用户：</h3>
+<p><a href="/user/reset/">点此重置普通用户的密码！</a></p>
+{% for u in alluser %}
+    <p><a href="/user/manage/{{u.uid}}">{{ u.username }}</a></p>
+{% endfor %}
+</form>
+
+{% endblock %}
+
+{% block main-right %}
+{% endblock %}

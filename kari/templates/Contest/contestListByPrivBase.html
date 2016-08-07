@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %} 考试列表 {% endblock %}
+
+{% block main-left %}
+<div class="pagination">
+{% block pagination %}{% endblock %}
+<b>
+{%if contest_list.paginator.num_pages %}
+共 {{ contest_list.paginator.num_pages }} 页
+{% endif %}
+</b>
+</div>
+<table class="table table-striped table-bordered">
+<tr>
+<th width="10%">考试编号</th>
+<th width="30%">名称</th>
+<th width="20%">开始时间</th>
+<th width="10%">状态</th>
+<th width="10%">持续时间</th>
+<th width="10%">类型</th>
+<th width="10%">修改考试</th>
+{% for c in contest_list.object_list %}
+<tr>
+<td> {{ c.id }} </td>
+<td><a href="{% url 'Contest:show_contest' c.id %}"> {{ c.title }} </td>
+<td> {{ c.start_time }} </td>
+<td> {{ c.status }} </td>
+<td> {{ c.length }} </td>
+<td> {{ c.type }} </td>
+<td><a href="{% url 'Contest:update_contest' c.id %}"> 修改考试 </td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

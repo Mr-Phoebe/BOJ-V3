@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %} 添加题目 {% endblock %}
+
+{% block main-left %}
+<script src="/static/js/problem.js"></script>
+<form action="/Problem/addData" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table table-bordered">
+        {{ form.as_table }}
+    </table>
+    <tbody>
+        {% for d in  %}
+    </tbody>
+    <input type="submit" value="提交">
+</form>
+{% endblock %}
+
+{% block main-right %}
+{% endblock %}

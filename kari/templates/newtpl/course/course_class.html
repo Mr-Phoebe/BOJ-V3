@@ -1,0 +1,19 @@
+{% extends "newtpl/course/course_class_base.html" %}
+
+{% block page-header %}
+<h1>分班首页 <small>{{course_class.getFullName}}</small></h1>
+{% endblock%}
+
+{%block detailed_info%}
+<div id="contest_info"> {# need modification #}
+    <div class="kari-head-info">
+        <span><strong>所属学院 </strong>{{ course_class.course.school.fullname }}</span>
+        <span><strong>所属课程 </strong>{{ course_class.course.getFullName }}</span>
+    </div>
+    <div class="kari-head-info">
+        <span><strong>开设年份 </strong>{{ course_class.year }}</span>
+        <span><strong>管理员 </strong>{{ course_class.admin }}</span>
+    </div>
+</div>
+{%endblock%}
+

@@ -1,0 +1,24 @@
+{% extends "newtpl/base.html" %}
+{% block title %}注册用户{% endblock title %}
+
+{% block main %}
+<link href="/static/newtpl/css/signin.css" rel="stylesheet">
+
+<div class="container">
+<form class="form-signin" method="POST">
+  {% csrf_token %}
+  <h2 class="form-signin-heading">注册用户</h2>
+  <input type="text" name="username" class="form-control" placeholder="用户名" required autofocus>
+  <input type="password" name="passwd1" class="form-control" placeholder="请输入密码" required>
+  <input type="password" name="passwd2" class="form-control" placeholder="请再次确认密码" required>
+  <hr />
+  <button class="btn btn-info" type="submit">注册</button>
+</form>
+</div>
+
+<h3>备注：</h3>
+<ul>
+  <li>用户名只能包含小写字母，数字和下划线，长度应在3~20之间。</li>
+  <li>密码长度应在6~30之间。</li>
+</ul>
+{% endblock main %}

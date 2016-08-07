@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %} Problem {{ p.pid }} {% endblock %}
+
+{% block main-left %}
+
+<h> {{ p.prob_name }} </h>
+<p> Accepted: {{ ac_user_num }} Submit: {{ sub_user_num }} </p><br/>
+<p> Time Limit: {{ p.prob_time }} Memory Limit: {{ p.prob_memory }} </p><br/>
+{% if p.is_spj %}
+<p> Special Judge </p><br/>
+{% endif %}
+
+<br/>
+<p> {{ p.prob_desc}} </p><br/>
+<br/>
+<a href='{{ submit_addr }}'>Submit</a> <a href='{{ static_addr }}'>Static</a><br/>
+
+{% endblock %}

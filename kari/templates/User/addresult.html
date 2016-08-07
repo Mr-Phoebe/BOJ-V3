@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %} 添加用户结果页 {% endblock %}
+
+{% block main-left %}
+<h1>注意！本页含有重要信息，请勿在妥善保管本页信息前关闭本页！</h1>
+{% if succcnt > 0 %}
+    <h5>您成功添加了{{ succcnt }}个比赛账户, 用户名密码如下所列：</h5>
+    {% for u, p in succ.items %}
+        <p>{{ u }}  {{ p }}</p>
+    {% endfor %}
+{% endif %}
+{% if failcnt > 0 %}
+    <h5>以下{{failcnt}}个帐号未能被添加：</h5>
+    {% for u, r in fail.items %}
+        <p>{{ u }}: {{ r }}</p>
+    {% endfor %}
+{% endif %}
+
+{% endblock %}
+
+{% block main-right %}
+    
+{% endblock %}

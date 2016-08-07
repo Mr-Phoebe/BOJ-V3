@@ -1,0 +1,64 @@
+{% extends "newtpl/base.html" %}
+{% block title %}测验列表{% endblock %}
+
+{% block main %}
+<div class="page-header">
+    <a class="btn btn-info pull-right" href="{% url 'Contest:list_all_contests' %}">所有考试</a>
+    <a class="btn btn-primary pull-right" href="{% url 'Contest:list_available_contests' %}">我能参加的考试</a>
+    <h1>测验列表</h1>
+</div>
+
+{% if contest_list and contest_list.paginator.num_page > 1 %}
+<div class="pagination pagination-centered">
+{% block pagination %}
+<ul>
+    {% if contest_list.has_previous %}
+    <li><a href="{% url 'Contest:list_contest' contest_list.previous_page_number %}">&laquo;</a></li>
+    {% else %}
+    <li class="disabled"><a href="#">&laquo;</a></li>
+    {% endif %}
+
+    {% for p in contest_list.paginator.page_range %}
+    {% if p == contest_list.number %}
+    <li class="disabled"><a href="#">{{ p }}</a></li>
+    {% else %}
+    <li><a href="{% url 'Contest:list_contest' p %}">{{ p }}</a></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if contest_list.has_next %}
+    <li><a href="{% url 'Contest:list_contest' contest_list.next_page_number %}">&raquo;</a></li>
+    {% else %}
+    <li class="disabled"><a href="#">&raquo;</a></li>
+    {% endif %}
+</ul>
+{% endblock pagination %}
+</div>
+{% endif %}
+{% block contest-list %}
+{% if contest_list and contest_list.count > 0 %}
+<div class="row"><div class="span12">
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>课程分班</th>
+        <th>标题</th>
+        <th>开始时间</th>
+        <th>时长</th>
+        <th>状态</th>
+    </thead>
+    {% for c in contest_list %}
+    <tr{%if c.status == 'running'%} class="info"{%endif%}>
+        <td>{{ c.course_class_name }}</td>
+        <td><a href="{% url 'Contest:show_contest' c.cid %}">{{ c.title }}</a></td>
+        <td>{{ c.start_time|date:"Y-m-d H:i:s" }}</td>
+        <td>{{ c.length }} 分钟</td>
+        <td>{% if c.status == 'ended' %}已结束{% elif c.status == 'running' %}进行中{% else %}未开始{% endif %}</td>
+    </tr>
+    {% endfor %}
+</table>
+</div></div>
+{% else %}
+{% include 'newtpl/err_div.html' with err_title='提示' err_title_color='#3a87ad' err_img='/static/newtpl/img/err_info.png'%}
+{% endif %}
+{% endblock contest-list %}
+{% endblock main %}

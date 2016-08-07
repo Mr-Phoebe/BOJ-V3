@@ -1,0 +1,19 @@
+{% extends "Contest/contestListByPrivBase.html" %}
+
+{% block title %} 考试列表 {% endblock %}
+
+{% block pagination %}
+{% if contest_list.has_previous %}
+<a href="{% url 'Contest:list_user_contest_manage' course_class contest_list.previous_page_number %}" title="Pre">上一页</a>
+{% endif %}
+{% for p in page_range %}
+{% ifequal p contest_list.number %}
+<span style="font-size:16px;" title="当前页"><b>{{ p }}</b></span>        
+{% else %}
+<a href="{% url 'Contest:list_user_contest_manage' p %}" title="第{{ p }}页">{{ p }}</a>
+{% endifequal %}
+{% endfor %}     
+{% if contest_list.has_next %}
+<a href="{% url 'Contest:list_user_contest_manage' course_class contest_list.previous_page_number %}" title="Next">下一页</a>
+ {% endif %}  
+{% endblock %}

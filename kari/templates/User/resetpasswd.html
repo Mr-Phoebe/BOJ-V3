@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %} 批量重置密码 {% endblock %}
+
+{% block main-left %}
+<h1>批量重置密码</h1>
+<form method="POST" action="/user/reset/">
+{%csrf_token%}
+{% for u in alluser %}
+    <p><input type="checkbox" name="user_list" value="{{u.uid}}" />{{ u.username }}</p>
+{% endfor %}
+<input type="submit" value="提交" />
+</form>
+
+{% endblock %}
+
+{% block main-right %}
+{% endblock %}

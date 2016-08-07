@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %} 注册用户 {% endblock %}
+
+{% block main-left %}
+<h3>注册</h3>
+<form action="/user/register/" method="POST">
+    {% csrf_token %}
+    <p>用户名: <input type="text" name="username"/></p>
+    <p>用户名只能包含"a-z", "0-9"和下划线，且长度须在5和30之间。</p>
+    <p>昵称: <input type="text" name="nickname" /></p>
+    <p>密码: <input type="password" name="passwd" /></p>
+    <p>重复密码: <input type="password" name="passwd2" /></p>
+    <p>密码长度应该在6到30之间！</p>
+    <p>Email: <input type="text" name="email" value="{{ user.email }}"/></p>
+    <p>性别： 
+    <select type="text" name="gender">
+        <option value="Male">男</option>
+        <option value="Female">女</option>
+        <option value="Secret">私密</option>
+    </select>
+    </p>
+    <p><input type="submit" value="提交" /></p>
+</form>
+{% endblock %}
+
+{% block main-right %}
+    
+{% endblock %}

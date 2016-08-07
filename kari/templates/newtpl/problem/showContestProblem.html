@@ -1,0 +1,68 @@
+{% extends "newtpl/problem/probBase.html" %}
+{% block title %}{{p.idx}}. {{p.title}}{% endblock %}
+{% block page-header %}
+    <h1>{{p.idx}}. {{p.title}} <small>{{c.contest_title}}</small></h1>
+{% endblock %}
+
+{% block prob-info %}
+    <span><strong>时间限制 </strong>{{ p.prob_time }} ms</span>
+    <span><strong>内存限制 </strong>{{ p.prob_memory }} KB</span>
+    {% if p.is_spj %}
+    <span><strong>Special Judge </strong></span>
+    {% endif %}
+{% endblock %}
+
+{% block prob-info-ext %}
+<!-- contest_notice -->
+{% endblock %}
+
+{% block main-right %}
+<div class="well">
+    <a class="btn btn-primary btn-block" href="{% url 'Submission:submit' c.cid p.idx %}">提交代码</a>
+    <a class="btn btn-info btn-block" href="{% url 'Statistic:contest_problem_st' c.cid p.idx %}">题目统计信息</a>
+    <a class="btn btn-info btn-block" href="{% url 'Submission:contest_status' c.cid %}{{ status_query }}">结果列表</a>
+    <a class="btn btn-info btn-block" href={%url 'Contest:show_contest' c.cid%}>&laquo;返回测验首页</a>
+    {%if tpl.can_manage%}
+    <a class="btn btn-warning btn-block" href="{%url 'Problem:updateproblem' p.pid%}">修改题目</a>
+    <a class="btn btn-warning btn-block" href="{%url 'Contest:update_contest' c.cid%}">修改测验</a>
+    {%endif%}
+</div>
+<div class="well">
+　　<h3>测验公告</h3>
+    {% if contest_notice_list and contest_notice_list|length > 0 %}
+    <!-div class="row">
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <th>公告标题</th>
+        </thead>
+        {% for cn in contest_notice_list %}
+        <tr>
+            <td><a href="{% url "Contest:show_contest_notice" c.cid cn.id %}">{{ cn.notice_title }}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <!-/div>
+    {% else %}
+    <div class="row">
+	<p class="text-center">暂时没有公告</p>
+    </div>
+    {% endif %}
+</div>
+<div class="well">
+    <h3>题目列表</h3>
+    <table class="table table-bordered table-condensed">
+        <thead>
+            <th></th>
+            <th>ID</th>
+            <th>通过数 / 提交数</th>
+        </thead>
+        {% for cp in cp_list %}
+        <tr>
+            <td>{%if cp.user_res == 1%}<strong><font color=red><center>Yes</center></font></strong>{%endif%}</td>
+            <td><a href="{%url 'Problem:contest_problem' c.cid cp.problem_index%}">{{ cp.problem_index }}</a></td>
+            <td><center>{{cp.ac}} / {{cp.sub}}</center></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

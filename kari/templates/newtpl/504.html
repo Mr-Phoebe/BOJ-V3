@@ -1,0 +1,5 @@
+{% extends "newtpl/base.html" %}
+{% block title %}HTTP 504{% endblock %}
+{% block main %}
+{% include 'newtpl/err_div.html' with err_title='HTTP 504' err_img='/static/newtpl/img/err_error.png' err_buglist=True%}
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %} 考试信息 {% endblock %}
+
+{% block main-left %}
+<script> var cid = {{ contest.cid }} </script>
+<script src="/static/js/contest.js"></script>    
+<b> 考试公告：</b>
+<marquee id="contest_notice"  onmouseover="stop();"  onmouseout="start();"></marquee>
+<h2> {{ contest.title }} </h2>
+<p> {{ contest.now }} {{ contest.start_time }} {{ contest.status }} {{ contest.left }} </p>
+<table class="table table-striped table-bodered">
+<tr>
+<th width="10%">已通过</th>
+<th width="10%">题目ID</th>
+<th width="50%">题目标题</th>
+<th width="10%">通过数</th>
+<th width="10%">提交数</th>
+<th width="10%">通过比例</th>
+</tr>
+{% for p in problem_list %}
+<tr>
+<td></td>
+<td><a href="{% url 'Problem:contestproblem' contest.cid p.index %}"> {{ p.index }}</a></td>
+<td><a href="{% url 'Problem:contestproblem' contest.cid p.index %}"> {{ p.title }}</a></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
+
+{% block main-right %}
+<p><a href="{% url 'Course:showCourseClass' ccid %}"> 返回课程分班 </a></p>
+<p><a href="{% url 'Contest:list_contest_notice' contest.cid %}"> 考试公告列表 </a></p>
+<p><a href="{% url 'Submission:contest_status' contest.cid %}"> 考试提交列表 </a></p>
+{% if has_priv %}
+<p><a href="{% url 'Contest:update_contest' contest.cid %}"> 修改考试 </a></p>
+<p><a href="{% url 'Contest:add_contest_notice' contest.cid %}"> 添加考试公告 </a></p>
+{% endif %}
+{% endblock %}

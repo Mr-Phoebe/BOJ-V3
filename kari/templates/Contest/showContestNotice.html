@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} 考试公告 {% endblock %}
+
+{% block main-left %}
+<h2> {{ contest_notice.notice_title }} </h2>
+<p> {{ contest_notice.notice_content }} </p>
+{% endblock %}
+
+{% block main-right %}
+<p><a href="{% url 'Contest:show_contest' cid %}"> 返回考试 </a></p>
+<p><a href="{% url 'Contest:list_contest_notice' cid %}"> 考试公告列表 </a></p>
+{% if has_priv %}
+<p><a href="{% url 'Contest:update_contest_notice' contest_notice.id cid %}"> 修改考试公告 </a></p>
+{% endif %}
+{% endblock %}

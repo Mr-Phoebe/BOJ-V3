@@ -1,0 +1,20 @@
+{% extends "newtpl/base.html" %}
+{% block title %}{{p.idx}}. {{p.title}} - kAri Online Judge{% endblock %}
+
+{% block main-left %}
+
+<script src="/static/js/problem.js"></script>
+<div class="page-header">{% block page-header %}{% endblock %}</div>
+<div id="problem_info" class="kari-head">{% block prob-info %}{% endblock %}</div>
+{% block prob-info-ext %}{% endblock %}
+
+
+<div class="kari-prob-btn">
+{% block prob-btn %}
+{% endblock %}
+</div>
+
+{% endblock %}
+
+{% block main-right %}
+{% endblock %}

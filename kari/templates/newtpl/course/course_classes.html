@@ -1,0 +1,56 @@
+{% extends "newtpl/course/course_base.html" %}
+
+{% block pagination %}
+{% if class_list and class_list.paginator.num_pages > 1 %}
+{# we should put 'if' in the 'block', or the 'if' would not be rendered #}
+<div class="pagination pagination-centered">
+    <ul>
+        {% if class_list.has_previous %}
+        <li><a href="{% url 'Course:showCourseClasses' course.id class_list.previous_page_number %}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% for p in class_list.paginator.page_range %}
+        {% if p == class_list.number %}
+        <li class="disabled"><a href="#">{{ p }}</a></li>
+        {% else %}
+        <li><a href="{% url 'Course:showCourseClasses' course.id p %}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if class_list.has_next %}
+        <li><a href="{% url 'Course:showCourseClasses' course.id class_list.next_page_number %}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block list_content %}
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>分班名称</th>
+        <th>开设年份</th>
+        <th>管理员</th>
+        {% if tpl.can_modify %}
+        <th>修改</th>
+        {#<th>删除</th>#}
+        {% endif %}
+    </thead>
+    {% for class in class_list %}
+    <tr>
+        <td><a href="{% url 'Course:showCourseClass' class.id %}">{{ class.getFullName }}</a></td>
+        <td>{{ class.year }}</td>
+        <td>{% if user.priv == 'university' %}<a href="{% url 'User:viewuser' class.admin.uid %}">{{ class.admin.username }}</a>{% else %}{{ class.admin.username }}{% endif %}</td>
+        {% if tpl.can_modify %}
+        <td><a class="btn btn-warning" href="{% url 'Course:updateCourseClass' class.id %}">修改</a></td>
+        {#<td><a href="{% url 'Course:deleteCourseClass' class.id %}">删除</a></td>#}
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+

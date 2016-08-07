@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %} 修改用户信息 {% endblock %}
+
+{% block main-left %}
+<h3>修改用户信息</h3>
+<form action="/user/update/" method="POST">
+    {% csrf_token %}
+    <p>用户名: {{ user.username }} </p>
+    <p>昵称: <input type="text" name="nickname" value="{{user.nickname }}"/></p>
+    <p>密码: <input type="password" name="passwd" /></p>
+    <p>重复密码： <input type="password" name="passwd2" /></p>
+    <p>Email： <input type="text" name="email" value="{{ user.email }}"/></p>
+    <p>性别: 
+    <select type="text" name="gender">
+        <option value="Male" {%ifequal user.gender 'Male' %} selected {% endifequal %}>男</option>
+        <option value="Female" {%ifequal user.gender 'Female' %} selected {% endifequal %}>女</option>
+        <option value="Secret" {%ifequal user.gender 'Secret' %} selected {% endifequal %}>私密</option>
+    </select>
+    </p>
+    <p><input type="submit" value="提交" /></p>
+</form>
+{% endblock %}
+
+{% block main-right %}
+{% endblock %}

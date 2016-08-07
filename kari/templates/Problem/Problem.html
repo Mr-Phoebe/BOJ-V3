@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %} 题目详情 {{ p.pid }} {% endblock %}
+
+{% block main-left %}
+
+{% if contest %}
+<p><a href="{% url 'Contest:show_contest' contest.cid %}">题目列表</a></p>
+<script> var cid = {{ contest.cid }} </script>
+<script src="/static/js/contest.js"></script>    
+<b> 考试公告：</b>
+<marquee id="contest_notice"  onmouseover="stop();"  onmouseout="start();"></marquee>
+<h2> {{ contest.title }} </h2>
+<p> {{ contest.now }} {{ contest.start_time }} {{ contest.status }} {{ contest.left }} </p>
+
+{% else %}
+<p><a href="{% url 'Problem:list' p.pid %}">Problem List</a></p>
+{% endif %}
+
+<h> {{ p.prob_title }} </h>
+<p> 通过次数:  提交次数:  </p><br/>
+<p> 时间限制: {{ p.prob_time }} 毫秒 内存限制: {{ p.prob_memory }} kb</p><br/>
+{% if p.is_spj %}
+<p><strong> Special Judge </strong></p><br/>
+{% endif %}
+
+<br/>
+<p>题目描述:</p>
+<p> {{ prob_desc}} </p><br/>
+<p>输入描述:</p>
+<p> {{ prob_input_desc}} </p><br/>
+<p>输出描述:</p>
+<p> {{ prob_output_desc}} </p><br/>
+<p>输入样例:</p>
+<p> {{ prob_input_sample}} </p><br/>
+<p>输出样例:</p>
+<p> {{ prob_output_sample}} </p><br/>
+<br/>
+{% if contest %}
+<a href="{% url 'Submission:submit' contest.cid idx %}">提交代码</a> <a href='#'>统计信息</a><br/>
+{% else %}
+<a href="{#% url 'Submission:submit' %#}">提交代码</a> <a href='#'>统计信息</a><br/>
+{% endif %}
+
+{% endblock %}
+
+{% block main-right %}
+
+{% if contest %}<p><a href="{% url 'Contest:show_contest' contest.cid %}"> 返回考试</a></p>{% endif %}
+{% if p.course.id %}<p><a href="{% url 'Course:showCourse' p.course.id %}"> 返回所属课程</a></p>{% endif %}
+{% endblock %}
+

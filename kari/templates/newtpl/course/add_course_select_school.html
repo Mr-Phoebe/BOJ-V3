@@ -1,0 +1,27 @@
+{% extends "newtpl/admin.html" %}
+{% block title %}添加课程{% endblock %}
+{% block page-header %}
+<h1>添加课程 <small>{{ user.university.name }}</small></h1>
+{% endblock %}
+
+{% block admin-form %}
+<h2>请选择课程所属的学院</h2>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>学院简称-学院名</th>
+        <th>选择</th>
+    </thead>
+    {% for school in school_list %}
+    <tr>
+        <td>{{ school.name }}-{{ school.fullname }}</td>
+        <td><a class="btn btn-primary " href="{% url 'Course:addCourse' school.id %}">选择</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+
+{% block admin-access %}
+{% if user.priv == 'university' %}
+{% endif %}
+<a class="btn btn-info btn-block" href="{% url 'Course:courses' %}">&laquo;返回课程列表</a>
+{% endblock %}

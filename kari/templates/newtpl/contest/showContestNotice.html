@@ -1,0 +1,17 @@
+{% extends "newtpl/base.html" %}
+{% block title %} 测验公告 {% endblock %}
+{% block main-left %}
+<div class="page-header">
+    {%if tpl.has_priv%}
+    <a class="btn pull-right" href="{% url 'Contest:update_contest_notice' contest_notice.id cid %}">修改公告</a>
+    {%endif%}
+    <a class="btn btn-primary pull-right" href="{% url 'Contest:show_contest' cid %}">返回测验</a>
+    <h1> {{ contest_notice.notice_title }} </h1>
+</div>
+<div>
+    <p>添加时间：{{ contest_notice.time|date:"Y-m-d H:i:s" }}</p>
+    <p>{{ contest_notice.notice_content }}</p>
+</div>
+{% endblock %}
+{% block main-right %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} 添加学院 {% endblock %}
+
+{% block main-left %}
+
+<h3>添加学院</h3>
+<form action="{% url 'User:addschool' %}" method="POST">
+{%csrf_token%}
+    {{form.as_table}}
+    <p><input type="submit" value="提交" /></p>
+</form>
+{% endblock %}
+
+{% block main-right %}
+<p><a href="{% url 'User:manageschool' %}">返回学院管理列表</a></p>
+{% endblock %}

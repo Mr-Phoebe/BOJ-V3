@@ -1,0 +1,22 @@
+{% extends "newtpl/base.html" %}
+{% block title %} 回答提问 {% endblock %}
+{% block main %}
+<div class="page-header">
+    <h1>添加提问<small> - </small></h1>
+    <a class="btn btn-primary pull-right" href="{% url 'Contest:show_contest' clar.contest.cid %}">返回测验</a>
+    <a class="btn btn-info pull-right" href="{% url 'Contest:view_all_clars' clar.contest.cid %}">返回提问列表</a>
+</div>
+<table class="table-left table-hover">
+    <tr>
+        <td><b>{{ clar.question }}</b></td>
+    </tr>
+</table>
+<form method="POST">
+    {% csrf_token %}
+    <textarea rows="4" class="span7" name="answer" required>{{ clar.answer }}</textarea>
+    <hr />
+    <button type="submit" class="btn btn-large btn-success">回答</button>
+</form>
+{% endblock %}
+{% block main-right %}
+{% endblock %}

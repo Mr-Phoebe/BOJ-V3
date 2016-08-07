@@ -1,0 +1,62 @@
+{%extends "newtpl/admin.html" %}
+{%block title%}代码查重结果{%endblock%}
+{%block page-header%}
+<h1>代码查重结果 <small>{{contest.contest_title}}</small></h1>
+{%endblock page-header%}
+{%block admin-access%}
+<a class="btn btn-primary btn-block" href="{%url 'Contest:show_contest' contest.cid%}">&laquo;返回测验</a>
+{%endblock%}
+{%block admin-form%}
+{%if cheat_list and cheat_list.paginator.num_pages > 1%}
+<div class="pagination pagination-centered">
+<ul>
+    {% if cheat_list.has_previous %}
+    <li><a href="{%url 'Cheat:show_cheat_result' contest.cid cheat_list.previous_page_number%}{%if request.GET.items%}?{%for k,v in request.GET.items%}{{k}}={{v}}&{%endfor%}{%endif%}">&laquo;</a></li>
+    {% else %}
+    <li class="disabled"><a href="#">&laquo;</a></li>
+    {% endif %}
+
+    <li class="disabled"><a href="#">{{ cheat_list.number }}</a></li>
+    
+    {% if cheat_list.has_next %}
+    <li><a href="{% url 'Cheat:show_cheat_result' contest.cid cheat_list.next_page_number %}{%if request.GET.items%}?{%for k,v in request.GET.items%}{{k}}={{v}}&{%endfor%}{%endif%}">&raquo;</a></li>
+    {% else %}
+    <li class="disabled"><a href="#">&raquo;</a></li>
+    {% endif %}
+</ul>
+<p>共{{cheat_list.paginator.num_pages}}页</p>
+</div>
+{%endif%}
+<div>
+
+<form class="form-inline kari-form-inline" method="get">
+    {{form.problem_index}}
+    {{form.username}}
+    <input class="btn btn-primary" type="submit" value="筛选">
+</form>
+
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>题目</th>
+        <th>用户1</th>
+        <th>提交ID</th>
+        <th>用户2</th>
+        <th>提交ID</th>
+        <th>状态</th>
+        <th>相似度</th>
+    </thead>
+    {%for ct in cheat_list %}
+    <tr>
+        <td><a target="_blank" href="{%url 'Problem:contest_problem' contest.cid ct.contest_problem.problem_index%}">{{ct.contest_problem.problem_index}}</a></td>
+        <td>{{ct.sub1.user.username}}</td>
+        {%comment%}<td><a target="_blank" href="{% url 'Submission:code_and_info' ct.sub1.sid %}">{{ct.sub1.sid}}</a></td>{%endcomment%}
+        <td><a target="_blank" href="{% url 'Submission:code_and_info' ct.sub1.sid %}">{{ct.sub1.sid}}</a></td>
+        <td>{{ct.sub2.user.username}}</td>
+        <td><a target="_blank" href="{% url 'Submission:code_and_info' ct.sub2.sid %}">{{ct.sub2.sid}}</a></td>
+        <td>{%if ct.status == -1%}待检查{%elif ct.status == 0%}检查中{%else%}完毕{%endif%}</td>
+        <td><a href="{% url 'Cheat:show_code_diff' ct.ctid %}" target="blank" >{{ct.ratio|floatformat:2}}</a></td>
+    </tr>
+    {%endfor%}
+</table>
+</div>
+{%endblock admin-form%}

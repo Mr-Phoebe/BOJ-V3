@@ -1,0 +1,62 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %} 用户信息 {% endblock %}
+
+{%block page-header%}
+<h1>用户管理 <small>{{user.university.fullname}}</small></h1>
+{%endblock%}
+
+{% block admin-form %}
+
+<h2>用户信息</h2>
+<table class="table-left table-hover">
+    <colgroup>
+        <col class="column_1">
+        <col class="column_2">
+    </colgroup>
+    <tbody>
+        <tr>
+            <td>用户名</td>
+            <td>{{ utov.username }}</td>
+        </tr>
+        <tr>
+            <td>昵称</td>
+            <td>{{ utov.nickname }}</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>{{ utov.email }}</td>
+        </tr>
+        <tr>
+            <td>性别</td>
+            <td>{{ utov.gender }}</td>
+        </tr>
+        <tr>
+            <td>学校</td>
+            <td>{{ utov.university.fullname }}</td>
+        </tr>
+        <tr>
+            <td>学院</td>
+            <td>{{ utov.school.fullname }}</td>
+        </tr>
+        <tr>
+            <td>级别</td>
+            <td>{{ utov.priv }}</td>
+        </tr>
+    </tbody>
+    {% if utov.priv == 'student' %}
+        <tr>
+            <td>班级</td>
+            <td>
+                {% for g in utov.group_set.all %}
+                    {{ g.name }}&nbsp;
+                {% endfor %}
+            </td>
+        </tr>
+    {% endif %}
+</table>
+{% endblock %}
+
+{% block admin-access %}
+<a class="btn btn-primary btn-block" href="/user/reset/{{utov.uid}}">重置密码</a>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %} 修改题目 {% endblock %}
+
+{% block main-left %}
+
+<form action="/Problem/updateProblemSubmit/{{ p.pid }}/" method="POST">
+    {% csrf_token %}
+    <p>题目标题：<input type="text" name="prob_title" value='{{ p.prob_title }}' /></p>
+    <p>题目权限：<input type="radio" name="prob_priv" value="private"/>私有
+                 <input type="radio" name="prob_priv" value="protected"/>上级可见
+                 <input type="radio" name="prob_priv" value="public"/>全局可见</p>
+    <p>时间限制：<input type="text" name="prob_time" value='{{ p.prob_time }}'/></p>
+    <p>内存限制：<input type="text" name="prob_memory" value='{{ p.prob_memory }}'/></p>
+    <p>代码长度限制：<input type="text" name="prob_codelength" value='{{ p.prob_codelength }}' /></p>
+    <p>题目描述：<textarea style="width: 667px; height: 373px" name="prob_desc">{{ p.prob_desc }}</textarea></p>
+    <p>是否需要特判：<input type="radio" name="is_spj" value="0"/>否
+                     <input type="radio" name="is_spj" value="1"/>是</p>
+    <p><input type="submit" value="submit" /></p>
+
+</form>
+
+{% endblock %}

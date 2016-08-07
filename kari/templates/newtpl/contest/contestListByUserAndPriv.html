@@ -1,0 +1,57 @@
+{% extends "newtpl/admin.html" %}
+{% block title %}测验列表{% endblock %}
+{% block page-header %}
+    <h1>测验列表</h1>
+{% endblock %}
+
+{% block admin-form %}
+{% if contest_list and contest_list.paginator.num_pages > 1 %}
+<div class="pagination pagination-centered">
+    <ul>
+        {% if contest_list.has_previous %}
+        <li><a href="{% url 'Contest:list_user_contest_manage' contest_list.previous_page_number %}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% for p in contest_list.paginator.page_range %}
+        {% if p == contest_list.number %}
+        <li class="disabled"><a href="#">{{ p }}</a></li>
+        {% else %}
+        <li><a href="{% url 'Contest:list_user_contest_manage' p %}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if contest_list.has_next %}
+        <li><a href="{% url 'Contest:list_user_contest_manage' contest_list.next_page_number %}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>课程分班</th>
+        <th>标题</th>
+        <th>开始时间</th>
+        <th width="10%">时长</th>
+        <th width="8%">状态</th>
+        <th width="8%">修改</th>
+    </thead>
+    {% for c in contest_list %}
+    <tr>
+        <td><a href="{% url 'Course:showCourseClass' c.course_class.id %}">{{ c.course_class_name }}</a></td>
+        <td><a href="{% url 'Contest:show_contest' c.cid %}">{{ c.title }}</a></td>
+        <td>{{ c.start_time|date:"Y-m-d H:i:s" }}</td>
+        <td>{{ c.length }} 分钟</td>
+        <td>{% if c.status == 'ended' %}已结束{% elif c.status == 'running' %}进行中{% else %}未开始{% endif %}</td>
+        <td><a class="btn btn-warning btn-block" href="{% url 'Contest:update_contest' c.cid %}">修改</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+
+{%block admin-access%}
+<a class="btn btn-primary btn-block" href="{%url 'Contest:add_contest_choose'%}">添加测验</a>
+{%endblock%}

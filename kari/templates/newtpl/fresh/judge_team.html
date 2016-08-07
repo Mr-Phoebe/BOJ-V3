@@ -1,0 +1,68 @@
+{% extends "newtpl/register/base.html" %}
+{% block title %}审核队伍{% endblock %}
+{% block main-admin %}
+<style type="text/css">
+    body {
+        margin-left: 50px;
+    }
+    .admin-page {
+        max-width: 80%;
+        margin: 0 auto;
+    }
+    h2 {
+        text-align: left;
+    }
+    h4 {
+        font-size: 30px;
+        margin: 30px 0;
+    }
+    .block {
+        margin: 30px 10%;
+    }
+    .block p {
+        margin-left: 10px;
+        font-size: 16px;
+    }
+    hr {
+        margin: -10 -1;
+    }
+    button {
+        margin: 0 10px;
+    }
+</style>
+<div class="admin-page">
+    <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+            <li><a href="{% url 'Register:home'%}">首页</a></li>
+            <li><a href="http://bbs.byr.cn/#!board/ACM_ICPC">论坛</a></li>
+            <li><a href="{% url 'Register:admin_logout' %}">管理员登出</a></li>
+        </ul>
+        <h3 class="muted">2014年北京邮电大学程序设计竞赛</h3>
+        <h3 class="muted">Pending: {{ pending }} &nbsp; &nbsp; Accepted: {{ accepted }} &nbsp; &nbsp; Failed: {{ failed }} &nbsp; &nbsp; Skipped: {{ skipped }}</h3>
+        <hr />
+    </div>
+
+    <h2>队伍名：{{ team.name }}</h2>
+    <hr />
+    <div class="row-fluid marketing block">
+        {% for member in members %}
+        <div class="span3">
+            <h4>{{ member.name }}</h4>
+            <p>性别：{{ member.gender }}</p>
+            <p>年级：{{ member.grade }}</p>
+            <p>学院：{{ member.school }}</p>
+            <p>班级：{{ member.class_id }}</p>
+            <p>学号：{{ member.student_id }}</p>
+            <p>手机：{{ member.mobile }}</p>
+            <p>Email：{{ member.email }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    <p style="text-align: center">
+        <a href="/apply/judge_team_result/{{team.pk}}/Accepted/" class="btn btn-large btn-success">审核通过</a>
+        <a href="/apply/judge_team_result/{{team.pk}}/Failed/" class="btn btn-large btn-warning">审核失败</a>
+        <a href="/apply/judge_team_result/{{team.pk}}/Skipped/" class="btn btn-large">跳过</a>
+        <a href="/apply/judge_team_result/{{team.pk}}/Starred/" class="btn btn-large btn-info">打星</a>
+    </p>
+</div>
+{% endblock %}

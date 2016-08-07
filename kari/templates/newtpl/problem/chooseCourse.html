@@ -1,0 +1,21 @@
+{% extends "newtpl/admin.html" %}
+{% block title %}添加题目{% endblock %}
+{% block page-header %}
+    <h1>添加题目</h1>
+{% endblock %}
+
+{%block admin-form%}
+<h2>请选择题目所属的课程</h2>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>课程号</th>
+        <th>课程名</th>
+    </thead>
+    {% for cs in list %}
+    <tr>
+        <td><a href="{%url 'Problem:addproblem' cs.id %}">{{ cs.no }}</a></td>
+        <td><a href="{%url 'Problem:addproblem' cs.id %}">{{ cs.name }}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{%endblock%}

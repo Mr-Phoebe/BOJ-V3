@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} 学生列表 {% endblock %}
+
+{% block main-left %}
+<H3>学生：</h3>
+{% for u in allstudent %}
+    <p> <a href="/user/viewuser/{{u.uid}}">{{ u.username }}</a></p>
+{% endfor %}
+<p><a href="/user/add/student">批量添加学生</a></p>
+</form>
+
+{% endblock %}
+
+{% block main-right %}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} {% if tags.update %}修改{% else %}添加{% endif %}课程 {% endblock %}
+
+{% block main-left %}
+<h3> 学院：<a href="{% url 'User:show_school' school.id %}">{{ school.name }}</a> {% if tags.update %}修改{% else %}添加{% endif %}课程 </h3>
+<form action="{% if tags.update %}{% url 'Course:updateCourse' course.id %}{% else %}{% url 'Course:addCourse' school.id %}{% endif %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <p><input type="submit" value="{% if tags.update %}修改{% else %}添加{% endif %}" /></p>
+</form>
+{% endblock %}
+
+{% block main-right %}
+{% if tags.update %}<p><a href="{% url 'Course:showCourse' course.id %}"> 返回课程 </a></p>{% endif %}
+<p><a href="{% url 'User:show_school' school.id %}"> 返回学院</a></p>
+{% endblock %}

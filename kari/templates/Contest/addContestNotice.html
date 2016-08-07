@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %} 添加考试公告 {% endblock %}
+
+{% block main-left %}
+<form action="{% url 'Contest:add_contest_notice' cid %}" method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+<table class="table table-bordered">
+{{ form.as_table }}
+</table>
+<input type="submit" value="提交">
+</form>
+{% endblock %}
+
+{% block main-right %}
+<p><a href="{% url 'Contest:show_contest' cid %}"> 返回考试 </a></p>
+<p><a href="{% url 'Contest:list_contest_notice' cid %}"> 考试公告列表 </a></p>
+{% endblock %}

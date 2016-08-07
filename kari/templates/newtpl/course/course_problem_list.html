@@ -1,0 +1,52 @@
+{% extends "newtpl/course/course_base.html" %}
+
+{% block pagination %}
+{% if problem_list and problem_list.paginator.num_pages > 1 %}
+{# we should put 'if' in the 'block', or the 'if' would not be rendered #}
+<div class="pagination pagination-centered">
+    <ul>
+        {% if problem_list.has_previous %}
+        <li><a href="{% url 'Course:showCourseProblems' course.id problem_list.previous_page_number %}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% for p in problem_list.paginator.page_range %}
+        {% if p == problem_list.number %}
+        <li class="disabled"><a href="#">{{ p }}</a></li>
+        {% else %}
+        <li><a href="{% url 'Course:showCourseProblems' course.id p %}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if problem_list.has_next %}
+        <li><a href="{% url 'Course:showCourseProblems' course.id problem_list.next_page_number %}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block list_content %}
+<h2>题目列表：本页共{{ problem_list|length }}道</h2>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>ID</th>
+        <th>标题</th>
+        {% if tpl.can_modify %}
+        <th>修改题目</th>
+        {% endif %}
+    </thead>
+    {% for p in problem_list %}
+    <tr>
+        <td>{{ p.pid }}</td>
+        <td><a href="{% url 'Problem:problem' p.pid %}">{{ p.prob_title }}</a></td>
+        {% if tpl.can_modify %}
+        <td><a class="btn btn-warning" href="{% url 'Problem:updateproblem' p.pid %}">修改</a></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

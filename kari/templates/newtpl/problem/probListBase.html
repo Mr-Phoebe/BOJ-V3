@@ -1,0 +1,44 @@
+{% extends "newtpl/base.html" %}
+
+{% block main %}
+
+<!-- <script src="/static/js/problem.js"></script> -->
+<div class="page-header">{% block page-header %}{% endblock %}</div>
+<div id="problem_info" class="kari-head-info">{% block prob-info %}{% endblock %}</div>
+{% block prob-info-ext %}{% endblock %}
+{% block prob-desc%}
+<div>
+<div class="kari-prob-desc">
+<h2>题目描述</h2>
+{{ p.desc.desc|safe }}
+</div>
+<div class="kari-prob-desc">
+<h2>输入格式</h2>
+{{ p.desc.input_desc|safe }}
+</div>
+<div class="kari-prob-desc">
+<h2>输出格式</h2>
+{{ p.desc.output_desc|safe }}
+</div>
+<div class="kari-prob-desc">
+<h2>输入样例</h2>
+<pre><code>{{ p.desc.input_sample }}</code></pre>
+</div>
+<div class="kari-prob-desc">
+<h2>输出样例</h2>
+<pre><code>{{ p.desc.output_sample }}</code></pre>
+</div>
+</div>
+
+
+{% endblock %}
+
+<div class="kari-prob-btn">
+{% block prob-btn %}
+{% endblock %}
+</div>
+
+{% endblock %}
+
+{% block main-right %}
+{% endblock %}

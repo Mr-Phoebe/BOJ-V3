@@ -1,0 +1,32 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %} 添加管理员 {% endblock %}
+
+{% block admin-form %}
+
+<h3>添加管理员</h3>
+<form action="/user/add/admin/" method="POST">
+    {% csrf_token %}
+    <p>用户名: <input type="text" name="username" /> </p>
+    <p>用户名只允许包含a-z, 0-9以及下划线！<br/>
+    您的用户名会被自动添加上 "{{univ_name}}#" 的前缀 </p>
+    <p>密码: <input type="password" name="passwd" /></p>
+    <p>重复密码: <input type="password" name="passwd2" /></p>
+    <p>管理员级别: <select name="priv">
+    <option></option>   
+    <option value="school">学院</option>
+    <option value="course">课程</option>
+    <option value="courseclass">课程分班</option>
+    </select></p>
+    <p>所属学院: <select name="school">
+    {%for s in schools%}
+        <option value="{{s.id}}">{{s.fullname}}</option>
+    {%endfor%}
+    </select></p>
+    <p><input type="submit" value="提交" /></p>
+</form>
+{% endblock %}
+
+{% block admin-access %}
+<a class='btn btn-block' href='/user/manage/admin/'>返回管理员列表</a>
+{% endblock %}

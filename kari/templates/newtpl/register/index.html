@@ -1,0 +1,23 @@
+{% extends "newtpl/register/base.html" %}
+<style>
+    .note {
+        font-weight: bold;
+        font-size: 12px;
+    }
+</style>
+{% block title %}首页{% endblock %}
+{% block main %}
+      <div class="jumbotron">
+        <h1>2016年新生赛</h1>
+        <hr />
+        <p class="lead">2016年BUPTACM新生赛报名</p>
+        <p class="lead">本次比赛面向15届大一新生。</p>
+        <p class="lead">报名截止时间：3月11日（周五）12:00</p>
+        <p class="lead">比赛时间：3月12日（周六）13:00-17:00</p>
+        <p class="lead">比赛详细信息请关注<a href="http://bbs.byr.cn/#!board/ACM_ICPC">北邮人论坛算法版</a></p>
+        <a class="btn btn-large btn-info" href="team">报名参赛</a>
+        <a class="btn btn-large btn-success" href="login">参赛队员登录</a>
+        <br>
+        <a href="admin_login">管理员登录</a>
+    </div>
+{% endblock %}

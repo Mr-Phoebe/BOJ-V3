@@ -1,0 +1,33 @@
+{% extends "newtpl/problem/probBase.html" %}
+{% block title %}{{p.pid}}. {{p.prob_title}}{% endblock %}
+{% block page-header %}
+    <h1>{{p.pid}}. {{p.prob_title}} </h1>
+{% endblock %}
+
+{% block prob-info %}
+    <span class="kari-head-info"><strong>时间限制 </strong>{{ p.prob_time }} ms</span>
+    <span class="kari-head-info"><strong>内存限制 </strong>{{ p.prob_memory }} KB</span>
+    {% if p.is_spj %}
+    <span class="kari-head-info"><strong><font color="red">Special Judge</font> </strong></span>
+    {% endif %}
+{% endblock %}
+
+{% block prob-info-ext %}
+<!-- contest_notice -->
+{% endblock %}
+
+{% block main-right %}
+<div class="well">
+    <a class="btn btn-primary btn-block" href="{% url 'Submission:general_submit' p.pid %}">提交代码</a>
+    <a class="btn btn-info btn-block" href="{% url 'Submission:status' %}">结果列表</a>
+    <a class="btn btn-info btn-block" href="{% url 'Statistic:problem_st' p.pid %}">统计结果</a>
+    <a class="btn btn-block" href={%url 'Problem:list' %}>&laquo;返回题目列表</a>
+    {% if p.course %}
+    <a class="btn btn-block" href={% url 'Course:showCourse' p.course.id %}>&laquo;返回所属课程</a>
+    {% endif %}
+    {%if tpl.can_manage%}
+    <a class="btn btn-block" href={% url 'Problem:updateproblem' p.pid %}>修改题目</a>
+    <a class="btn btn-block">修改测验</a>
+    {%endif%}
+</div>
+{% endblock %}

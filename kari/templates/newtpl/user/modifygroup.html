@@ -1,0 +1,58 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %}编辑班级{% endblock %}
+{%block page-header%}<h1>{{group.name}} <small>编辑</small></h1>{%endblock%}
+
+{%block admin-form%}
+<form class="kari-admin-form form-horizontal" action="{{request.get_full_path}}" method="post">
+{%csrf_token%}
+<div class="control-group">
+    <label class="control-label">{{form.name.label}}</label>
+    <div class="controls">
+        {{form.name}}
+    </div>
+</div>
+<div class="control-group">
+    <label class="control-label">{{form.school.label}}</label>
+    <div class="controls">
+        {{form.school}}
+    </div>
+</div>
+<div class="form-actions">
+    <input class="btn btn-primary" type="submit" value="提交">
+</div>
+</form>
+<div class="controls">
+    <h2>所有组员 <small><a href='/user/modify/group/{{group.id}}/resetall/'>全部重置密码</a></small></h2>
+    <table class="table table-bordered">
+    <tr><td>用户名</td></tr>
+    {% for u in users %}
+        <tr><td><a href='/user/viewuser/{{u.uid}}'>{{u.username}}</a></td></tr>
+    {%endfor%}
+    </table>
+</div>
+{%endblock%}
+
+{%comment%}
+
+<h3>编辑群组信息--{{group.name}}</h3>
+<form action="/user/modify/group/{{group.id}}" method="POST">
+{%csrf_token%}
+    <p>群组名称：<input type="text" name="groupname" value="{{group.name}}" /></p>
+    <p>所属学院：<select name="school">
+    {%for s in schools%}
+        <option value="{{s.id}}">{{s.name}}</option>
+    {%endfor%}
+    </select></p>
+    <p><input type="submit" value="提交" /></p>
+</form>
+<p><a href="/user/modify/group/{{group.id}}/addmember">添加组员！</a></p>
+<p>群组成员：</p>
+    {% for u in users %}
+        <p>{{u.username}} <a href="/user/modify/group/{{group.id}}/delmember/{{u.uid}}">从群组中删除</a><p>
+    {%endfor%}
+{% endblock %}
+{%endcomment%}
+
+{% block admin-access %}
+{% endblock %}

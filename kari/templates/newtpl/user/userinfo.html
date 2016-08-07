@@ -1,0 +1,29 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %} 用户信息 {% endblock %}
+
+{% block admin-form %}
+
+<h1>用户信息</h1>
+<table class='table-left table-border table-striped'>
+<tr><td>用户名</td><td>{{ user.username }}</td></tr>
+<tr><td>昵称</td><td>{{ user.nickname }}</td></tr>
+<tr><td>电子邮箱</td><td>{{ user.email }}</td></tr>
+<tr><td>性别</td><td>{{ user.gender }}</td></tr>
+<tr><td>学校</td><td>{{ user.university.fullname }}</td></tr>
+<tr><td>学院</td><td>{{ user.school.fullname }}</td></tr>
+<tr><td>用户级别</td><td>{{ user.priv }}</td></tr>
+{% if user.priv == 'student' %}
+    <td>班级</td>
+    <td>
+    {% for g in user.group_set.all %}
+        {{ g.name }}&nbsp;
+    {% endfor %}
+    </td>
+{% endif %}
+</table>
+{% endblock %}
+
+{% block admin-access %}
+    <a href='/user/update' class='btn btn-block'>修改用户信息</a>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %} 提交{% if contest %}考试{% endif %}代码 {% endblock %}
+
+{% block main-left %}
+
+<h3>提交{% if contest %}考试{% endif %}代码</h3>
+<form action="{% url 'Submission:submit' contest.cid problem_index %}" method="POST"
+    {% if form.is_multipart %} enctype="multipart/form-data" {% endif %}>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% if show_tags.show_pid %}
+    <div class="fieldWrapper">
+        {{ form.pid.errors }}
+        {{ form.pid.label_tag }} {{ form.pid }}
+    </div>
+    {% endif %}
+    {% if show_tags.show_cid %}
+    <div class="fieldWrapper">
+        {{ form.cid.errors }}
+        {{ form.cid.label_tag }} {{ form.cid }}
+    </div>
+    {% endif %}
+    {% if show_tags.show_problem_index %}
+    <div class="fieldWrapper">
+        {{ form.problem_index.errors }}
+        {{ form.problem_index.label_tag }} {{ form.problem_index }}
+    </div>
+    {% endif %}
+    <div class="fieldWrapper">
+        {{ form.language.errors }}
+        {{ form.language.label_tag }} {{ form.language }}
+    </div>
+    <div class="fieldWrapper">
+        {{ form.code.errors }}
+        {{ form.code.label_tag }} {{ form.code }}
+    </div>
+    <div class="fieldWrapper">
+        {{ form.code_file.errors }}
+        {{ form.code_file.label }} {{ form.code_file }}
+    </div>
+    <p>ps:默认以上传的文件优先。</p>
+    <p><input type="submit" value="提交" /></p>
+</form>
+{% endblock %}
+
+{% block main-right %}
+<p><a href="{% url 'Problem:contestproblem' contest.cid problem_index %}">返回题目</a></p>
+    
+{% endblock %}

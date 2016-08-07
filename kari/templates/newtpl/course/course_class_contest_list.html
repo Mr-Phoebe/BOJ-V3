@@ -1,0 +1,54 @@
+{% extends "newtpl/course/course_class_base.html" %}
+{% block page-header %}
+<h1>测验列表 <small>{{course_class.getFullName}}</small></h1>
+{% endblock%}
+
+{% block pagination %}
+{% if contest_list and contest_list.paginator.num_pages > 1 %}
+{# we should put 'if' in the 'block', or the 'if' would not be rendered #}
+<div class="pagination pagination-centered">
+    <ul>
+        {% if contest_list.has_previous %}
+        <li><a href="{% url 'Course:showCourseClassContests' course_class.id contest_list.previous_page_number %}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% for p in contest_list.paginator.page_range %}
+        {% if p == contest_list.number %}
+        <li class="disabled"><a href="#">{{ p }}</a></li>
+        {% else %}
+        <li><a href="{% url 'Course:showCourseClassContests' course_class.id p %}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if contest_list.has_next %}
+        <li><a href="{% url 'Course:showCourseClassContests' course_class.id contest_list.next_page_number %}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block list_content %}
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>标题</th>
+        <th>开始时间</th>
+        <th>时长</th>
+        <th>状态</th>
+        <th>修改</th>
+    </thead>
+    {% for c in contest_list %}
+    <tr>
+        <td><a href="{% url 'Contest:show_contest' c.cid %}">{{ c.title }}</a></td>
+        <td>{{ c.start_time|date:"Y-m-d H:i:s" }}</td>
+        <td>{{ c.length }} 分钟</td>
+        <td>{% if c.status == 'ended' %}已结束{% elif c.status == 'running' %}进行中{% else %}未开始{% endif %}</td>
+        <td><a class="btn btn-warning" href="{%url 'Contest:update_contest' c.cid%}">修改</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

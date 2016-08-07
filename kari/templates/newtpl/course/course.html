@@ -1,0 +1,13 @@
+{% extends "newtpl/course/course_base.html" %}
+{%block detailed_info%}
+<div id="contest_info"> {# need modification #}
+    <div class="kari-head-info">
+        <span><strong>所属学院 </strong>{{ course.school.fullname }}</span>
+        <span><strong>编号 </strong>{{ course.no }}</span>
+    </div>
+    <div class="kari-head-info">
+        <span><strong>管理员 </strong>{{ course.admin }}</span>
+    </div>
+</div>
+{%endblock%}
+

@@ -1,0 +1,36 @@
+{% extends "newtpl/base.html" %}
+{% block title %}公告列表 - kAri Online Judge{% endblock %}
+{% block main %}
+<div class="page-header">
+    <h1>公告列表</h1>
+</div>
+{% if contest_notice_list and contest_notice_list.count > 0 %}
+<div class="row"><div class="span12">
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>时间</th>
+        <th>标题</th>
+        {% if tpl.has_priv %}
+        <th>修改公告</th>
+        {% endif %}
+    </thead>
+    {% for cn in contest_notice_list %}
+    <tr>
+        <td>{{ cn.time|date:"Y-m-d H:i:s" }}</td>
+        <td><a href="{% url "Contest:show_contest_notice" cid cn.id %}">{{ cn.notice_title }}</a></td>
+        {% if tpl.has_priv %}
+        <td><a href="{% url 'Contest:update_contest_notice' cn.id cid %}">修改公告</a></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+</div></div>
+{% else %}
+<div class="row">
+    <div class="span12" style="text-align:center">
+        <img src="/static/newtpl/img/err_info.png" class="kari-img-err"/>
+        <p class="text-center">暂时没有公告</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %} 添加组员 {% endblock %}
+
+{% block admin-form %}
+
+<h3>添加组员</h3>
+<p>每行输入一个用户名，用户名只能包含小写字母，数字以及下划线<p>
+<form action="/user/modify/group/{{group_id}}/addmember/" method="POST">
+    {% csrf_token %}
+    <textarea name="usernames" rows="20" cols="100"></textarea>
+    <p><input type="submit" value="提交" /></p>
+</form>
+{% endblock %}
+
+{% block admin-access %}
+    
+{% endblock %}

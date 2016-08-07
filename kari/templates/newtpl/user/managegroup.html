@@ -1,0 +1,66 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %}班级列表{% endblock %}
+{% block page-header %}<h1>班级列表 <small>{{user.university.fullname}}</small></h1>{% endblock %}
+
+{% block admin-form %}
+{% if groups and groups.paginator.num_pages > 1 %}
+<div class="pagination pagination-centered">
+    <ul>
+        {% if groups.has_previous %}
+        <li><a href="{% url 'User:managegroup' groups.previous_page_number %}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% for p in groups.paginator.page_range %}
+        {% if p == groups.number %}
+        <li class="disabled"><a href="#">{{ p }}</a></li>
+        {% else %}
+        <li><a href="{% url 'User:managegroup' p %}">{{p}}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if groups.has_next %}
+        <li><a href="{% url 'User:managegroup' groups.next_page_number %}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>    
+
+{%endif%}
+<table class="table table-bordered table-striped table-hover">
+    <thead><tr>
+        <th>班级号</th>
+        <th>所属学院</th>
+        <th>人数</th>
+        <th>修改</th>
+        <th>添加组员</th>
+    </tr></thead>
+    <tbody>
+        {%for g in groups%}
+    <tr>
+        <td>{{g.name}}</td>
+        <td>{{g.school.fullname}}</td>
+        <td>{{g.cnt}}</td>
+        <td><a href="{%url 'User:modifygroup' g.id%}">修改</a></td>
+        <td><a href="{%url 'User:addgroupmember' g.id%}">添加组员</a></td>
+    </tr>
+        {%endfor%}
+    </tbody>
+</table>
+{% endblock%}
+{%comment%}
+<h3>群组列表</h3>
+{% for g,c in groups %}
+    <h5> {{g.name}} </h5> <a href="/user/modify/group/{{g.id}}">修改</a>
+    <p>所属学院：{{g.school.name}} </p>
+    <p>组员人数：{{ c }}
+{% endfor %}
+{% endblock %}
+{%endcomment%}
+
+{% block admin-access %}
+<a class="btn btn-primary btn-block" href="{%url 'User:addgroup'%}">添加班级</a>
+{% endblock %}

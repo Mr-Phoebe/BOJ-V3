@@ -1,0 +1,75 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %}课程分班列表{% endblock %}
+{%block page-header%}
+<h1>课程分班列表 <small>{{user.username}}</small></h1>
+{%endblock%}
+
+{% block admin-form %}
+{% if course_class_list and course_class_list.paginator.num_pages > 1 %}
+{# we should put 'if' in the 'block', or the 'if' would not be rendered #}
+<div class="pagination pagination-centered">
+    <ul>
+        {% if course_class_list.has_previous %}
+        <li><a href="{% url 'Course:classes' course_class_list.previous_page_number %}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% for p in course_class_list.paginator.page_range %}
+        {% if p == course_class_list.number %}
+        <li class="disabled"><a href="#">{{ p }}</a></li>
+        {% else %}
+        <li><a href="{% url 'Course:classes' p %}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if course_class_list.has_next %}
+        <li><a href="{% url 'Course:classes' course_class_list.next_page_number %}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+<table class="table table-bordered table-striped table-hover">
+    <thead><tr>
+            {#<th>ID</th>#}
+            <th>分班名称</th>
+            <th>所属课程</th>
+            {#<th>开设年份</th>#}
+            <th>所属学院</th>
+            {% if user.priv != 'courseclass' %}
+            <th>管理员</th>
+            {% endif %}
+            {% if tpl.can_modify %}
+            <th>修改</th>
+            {#<th>删除</th>#}
+            {% endif %}
+    </tr></thead>
+    <tbody>
+        {% for c_c in course_class_list %}
+        <tr>
+            {#<td>{{c_c.id}}</td>#}
+            <td><a href="{% url 'Course:showCourseClass' c_c.id %}">{{ c_c.name }}</a></td>
+            <td>{% if user.priv == 'university' or user.priv == 'school' or user.priv == 'course' %}<a href="{% url 'Course:showCourse' c_c.course.id %}">{{ c_c.course.getFullName }}</a>{% else %}{{ c_c.course.getFullName }}{% endif %}</td>
+            {#<td>{{ c_c.year }}</td>#}
+            <td>{% if user.priv == 'university' or user.priv == 'school' %}<a href="{% url 'User:show_school' c_c.course.school.id %}">{{ c_c.course.school.fullname }}</a>{% else %}{{ c_c.course.school.fullname }}{% endif %}</td>
+            {% if user.priv != 'courseclass' %}
+            <td>{% if user.priv == 'university' %}<a href="{% url 'User:viewuser' c_c.admin.uid %}">{{ c_c.admin.username }}</a>{% else %}{{ c_c.admin.username }}{% endif %}</td>
+            {% endif %}
+            {% if tpl.can_modify %}
+            <td><a class="btn btn-warning" href="{% url 'Course:updateCourseClass' c_c.id %}">修改</a></td>
+            {#<td><a class="btn btn-danger btn-block" href="{% url 'Course:deleteCourseClass' c_c.id %}">删除</a></td>#}
+            {% endif %}
+        </tr>
+        {%endfor%}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block admin-access %}
+{% if user.priv == 'university' %}
+<a class="btn btn-primary btn-block" href="{% url 'Course:addCourseClass' %}">添加分班</a>
+{% endif %}
+{% endblock %}

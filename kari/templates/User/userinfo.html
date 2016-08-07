@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %} 用户信息 {% endblock %}
+
+{% block main-left %}
+
+<h1>用户信息</h1>
+<p> 用户名: {{ user.username }} </p>
+<p> 昵称: {{ user.nickname }} </p>
+<p> Email: {{ user.email }} </p>
+<p> 性别: {{ user.gender }} </p>
+<p> 学校: {{ user.university.fullname }} </p>
+<p> 学院: {{ user.school.fullname }} </p>
+<p> 级别: {{ user.priv }} </p>
+{% if user.priv == 'student' %}
+    <p> 
+    班级:
+    {% for g in user.group_set.all %}
+        {{ g.name }}&nbsp;
+    {% endfor %}
+    </p>
+{% endif %}
+
+{% endblock %}
+
+{% block main-right %}
+{% if user.priv == 'university' %}
+{%endif%}
+{% endblock %}

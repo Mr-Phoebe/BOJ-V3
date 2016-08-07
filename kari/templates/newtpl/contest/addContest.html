@@ -1,0 +1,8 @@
+{% extends "newtpl/contest/modifyContest.html" %}
+{% block title %}添加测验{% endblock %}
+{%block page-header %}
+    <h1>添加测验 <small>{{cc.getFullName}}</small></h1>
+{%endblock page-header%}
+{% block admin-access %}
+<a class="btn btn-primary btn-block" href="{% url 'Course:showCourseClass' cc.id %}">&laquo;返回课程分班</a>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "newtpl/admin.html" %}
+{% block title %}
+    {% if not update %}
+添加题目
+    {% else %}
+修改题目
+    {% endif %}
+{% endblock %}
+
+{% block page-header %}
+{% if not update %}
+<h1>添加题目 <small>{{course.getFullName}}</small></h1>
+{% else %}
+<h1>修改题目 <small>{{problem.pid}}. {{problem.prob_title}}</small></h1>
+{% endif %}
+{% endblock %}
+
+{%block admin-form%}
+    <form action="{{request.get_full_path}}" method="POST" enctype="multipart/form-data" onSubmit="return checkAllData()">
+        {%csrf_token%}
+        <div><h3>所属课程 </strong>{{problem.course.getFullName}}</h3></div>
+        <table class="kari-prob-desc">
+            {{form.media}}
+            {{form.as_table}}
+        </table>
+        <h3>对于分组记分式的题目，每个数据文件完全正确才能得分，
+            因此建议每个文件一个用例。</h3>
+        <table class="table table-bordered">
+            <thead>
+                <th width="10%"></th>
+                <th width="35%">数据输入文件</th>
+                <th width="35%">数据输出文件</th>
+                <th width="20%">数据得分</th>
+            </thead>
+            {% for case_id in cases %}
+            <tr>
+                <th></th>
+                <th><a href="{% url 'Problem:previewtestdata' problem.pid case_id 0 %}" target="view-window">{{ case_id }}.in</a></th>
+                <th><a href="{% url 'Problem:previewtestdata' problem.pid case_id 1 %}" target="view-window">{{ case_id }}.out</a></th>
+                <th></th>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <table class="kari-prob-desc" id="data_table" >
+            <tr>
+            <th width="10%" class="data_modifiy">
+                <button type="button" onclick="addData()">添加</button>
+            </th>
+            <th width="40%" class="data_in">输入数据文件
+            </th>
+            <th width="40%" class="data_out">输出数据文件
+            </th>
+            <th width="10%" class="data_scr">数据得分
+            </th>
+            </tr>
+
+        </table>
+        <div align="right"><input type="submit" class="btn btn-primary" value="   提交   " align="right"></div>
+    </form>
+{%endblock admin-form%}
+{%block ext-script%}
+    <script src="/static/js/problem.js"></script>
+    <script src="/static/ckeditor/ckeditor/ckeditor.js"></script>
+{%endblock ext-script%}
+{% block admin-access %}
+{% endblock %}

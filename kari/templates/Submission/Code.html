@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %} 查看代码 {% endblock %}
+
+{% block main-left %}
+
+<h3>查看代码</h3>
+{#% ssi code_content %#}
+{{ code_content|linebreaks }}
+{% endblock %}
+
+{% block main-right %}
+    
+{% endblock %}

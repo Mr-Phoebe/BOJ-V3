@@ -1,0 +1,52 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %}学生列表{% endblock %}
+{% block page-header%}
+<h1>学生列表 <small>{{user.university.fullname}}</small></h1>
+{% endblock %}
+
+{% block admin-form%}
+{% if allstudent and allstudent.paginator.num_pages > 1 %}
+<div class="pagination pagination-centered">
+    <ul>
+        {% if allstudent.has_previous %}
+        <li><a href="{% url 'User:managestudent' allstudent.previous_page_number %}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% if allstudent.has_next %}
+        <li><a href="{% url 'User:managestudent' allstudent.next_page_number %}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>    
+
+{%endif%}
+
+<form class="form-inline" action="{% url 'User:managestudent'%}" method="get">
+    <input type="text" name="username" placeholder="{{user.university.name}}#学号" />
+    <input type="submit" class="btn btn-info" value="搜索用户"/>
+</form>
+<table class="table table-bordered table-striped table-hover">
+    <thead><tr>
+        <th>用户名</th>
+        <th>姓名</th>
+        <th>修改</th>
+    </tr></thead>
+    <tbody>
+        {% for u in allstudent %}
+    <tr>
+        <td>{{u.username}}</td>
+        <td>{{u.nickname}}</td>
+        <td><a href="/user/viewuser/{{u.uid}}">修改</a></td>
+    </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block admin-access %}
+<a class="btn btn-primary btn-block" href="{%url 'User:addstudent' %}">批量导入学生</a>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends "newtpl/base.html" %}
+
+{% block title %} 提交 {{submission.id}}. - kAri Online Judge{% endblock %}
+
+{% block main-left %}
+
+{% block modify-css %}
+<style>
+li.L0, li.L1, li.L2, li.L3,
+li.L5, li.L6, li.L7, li.L8
+{ list-style-type: decimal !important }
+</style>
+{% endblock modify-css %}
+
+{% block info %}
+{% with idx=submission.problem_id %}
+
+    <h1>查看提交详情</h1>
+    <table class="table">
+        <colgroup>
+            <col class="column_1">
+            <col class="column_2">
+        </colgroup>
+        <tbody>
+            <tr>
+                <td class="column_1">评测结果</td>
+                <td class="column_2"><strong><span class="{{ info.status_color }}"> {{ info.status_cn }}</span></strong></td>
+            </tr>
+            <tr>
+                <td class="column_1">用户</td>
+                <td class="column_2"><a href="{% url 'User:viewuser' info.user %}">{{ submission.user.username }}</a></td>
+            <tr>
+                <td class="column_1">题目</td>
+                <td class="column_2"><a href="{% url 'Problem:problem' idx %}">{{ submission.problem.prob_title }}</a></td>
+            </tr>
+            <tr>
+                <td class="column_1">代码语言</td>
+                <td class="column_2">{{ info.lang }}</td>
+            </tr>
+            <tr>
+                <td class="column_1">运行时间</td>
+                <td class="column_2">{{ info.run_time }} ms</td>
+            </tr>
+            <tr>
+                <td class="column_1">内存使用</td>
+                <td class="column_2">{{ info.run_memory }} KB</td>
+            </tr>
+            <tr>
+                <td class="column_1">提交IP</td>
+                <td class="column_2">{% if info.submit_ip %} {{ info.submit_ip }} {% else %} 提交者IP地址未记录 {% endif %}</td>
+            </tr>
+            <tr>
+                <td class="column_1">评测机</td>
+                <td class="column_2">{{ info.judger }}</td>
+            </tr>
+            <tr>
+                <td class="column_1">评测时间</td>
+                <td class="column_2">{{ info.judge_time }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endwith %}
+{% endblock info %}
+
+<!--
+{% block info2 %}
+{% with idx=submission.problem_id %}
+<div>
+    提交编号 {{ submission.id }} 题目<a href="{% url 'Problem:problem' idx %}"> {{ submission.problem.prob_title }} </a>
+    <h3>查看提交详情</h3>
+    <p> 提交用户: {{ submission.user.username }} 提交IP: {% if info.submit_ip %} {{ info.submit_ip }} {% else %} 提交者IP地址未记录 {% endif %} </p>
+    <p> 结果: <strong><span class="{{ info.status_color }}"> {{ info.status_cn }}</span></strong></p>
+    <p> 运行时间: {{ info.run_time }} ms 占用内存: {{ info.run_memory }} kb
+    {% if "ce" in info %}
+        <pre>{{ info.ce }}</pre>
+    {% endif %}
+    <p>数据组数: {{ info.data_cnt }}</p>
+    {% if "case_judged" in info %}
+        <p>已判组数: {{ info.case_judged }} 总分: {{ info.score }} </p> 
+        {% if info.case_result %}
+            {% for seq in info.case_result %}
+                <p>第{{ forloop.counter }}组结果: {{ seq.res_cn }} 运行时间: {{ seq.time }} ms 占用内存: {{ seq.mem }} kb {% if seq.score %} 分数: {{ seq.score }}{% endif %}</p>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+</div>
+{% endwith %}
+{% endblock info2 %}
+--!>
+
+{% block code %}
+<div>
+代码<small>（行号在复制的时候不会被错误的包含进去）</small>:
+    <pre class="prettyprint linenums">{{ code_content }}</pre>
+</div>
+{% endblock code %}
+
+{% endblock %}
+
+{% block main-right %}
+<div class="well">
+    <a class="btn btn-primary btn-block" href="{% url 'Submission:status' %}{{ status_query }}">结果列表</a>
+</div>
+{% endblock %}
+
+{% block ext-script %}
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+{% endblock %}

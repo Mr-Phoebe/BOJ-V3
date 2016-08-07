@@ -1,0 +1,42 @@
+input.kari-nav-input {
+	width: 144px;
+}
+
+footer.kari-footer {
+	text-align: center;
+	font-size: 12px;
+	line-height: 16px;
+}
+
+footer p {
+	margin: 6px;
+}
+
+.kari-noti {
+	margin-left: 12px;
+	color: #d64937;
+}
+.kari-prob-div {
+	margin-bottom: 32px;
+}
+.kari-prob-info {
+	font-size:13px;
+
+}
+.kari-prob-info-spj {
+	color: #1f65bd;
+}
+.kari-prob-img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+}
+.kari-prob-div p b, .kari-prob-div p i {
+	/*color: #b94a48;*/
+	color: #1f65bd;
+}
+.kari-prob-btn {
+	min-width: 50px;
+	margin-right: 10px;
+}

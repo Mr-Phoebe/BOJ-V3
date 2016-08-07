@@ -1,0 +1,111 @@
+{% extends "newtpl/base.html" %}
+{% block title %}{{ contest.title }}{% endblock %}
+{% block main %}
+<div class="page-header">
+    <Meta http-equiv="Refresh" Content="50;">
+    {%if tpl.has_priv%}
+    {%if contest.status == "ended"%}<button class="btn btn-inverse pull-right" onclick="postRequest();" id="submit">代码查重</button>{%endif%}
+    <a class="btn pull-right" href="{% url 'Contest:add_contest_notice' contest.cid %}">添加公告</a>
+    <a class="btn btn-primary pull-right" href="{% url 'Contest:update_contest' contest.cid %}">修改测验</a>
+    {%endif%}
+    <h1>{{ contest.title }}
+        <small>{% if contest.status == "ended" %}已结束{% elif contest.status == "running" %}进行中{% else %}未开始{% endif %}</small>
+    </h1>
+</div>
+<ul class="nav nav-pills">
+    <li class="active"><a href="{{request.get_full_path}}">测验首页</a></li>
+    <li><a href="{%url 'Submission:contest_status' contest.cid%}">结果列表</a></li>
+    <li><a href="{%url 'Contest:view_all_clars' contest.cid%}">提问列表</a></li>
+    {% if contest.board_type == 0 or contest.board_type == 2%}
+    <li><a href="{%url 'Statistic:boardByAC' contest.cid%}">排行榜</a></li>
+    {% else %}
+    <li><a href="{%url 'Statistic:boardByScore' contest.cid%}">排行榜</a></li>
+    {% endif %}
+    {%if tpl.has_priv%}<li><a href="{%url 'Statistic:balloon' contest.cid%}">气球</a></li>{% endif %}
+</ul>
+<div id="contest_info">
+    <div class="kari-head-info">
+        <span class="kari-head-info"><strong>课程分班 </strong>{{ contest.course_class_name }}</span>
+        {%if contest.description%}<br><br><span class="kari-head-info"><strong>测验描述 </strong>{{ contest.description|safe }}</span>{%endif%}
+    </div>
+    <div class="kari-head-info">
+        <span class="kari-head-info"><strong>当前时间 </strong><span class="clock">{% now "Y-m-d H:i:s" %}</span></span>
+        <span class="kari-head-info"><strong>开始时间 </strong>{{ contest.start_time|date:"Y-m-d H:i:s" }}</span>
+        <span class="kari-head-info"><strong>总长 </strong>{{ contest.length }} 分钟</span>
+        <span class="kari-head-info"><strong>剩余 </strong>{{ contest.time_left }} 分钟</span>
+    </div>
+    <div class="row">
+        <div class="progress span12"><div class="bar" style="width:{{ contest.time_passed_percent }}%"></div></div>
+    </div>
+</div>
+{% if contest_notice_list and contest_notice_list|length > 0 %}
+<div>
+<h2>测验公告</h2>
+<table class="table table-bordered table-striped table-hover table-word-break">
+    <thead>
+        <th width="15%">时间</th>
+        <th width="30%">标题</th>
+        <th>内容</th>
+        {%if tpl.has_priv%}
+        <th width="5%">修改</th>
+        {%endif%}
+    </thead>
+    {% for cn in contest_notice_list %}
+    <tr>
+        <td>{{ cn.time|date:"Y-m-d H:i:s" }}</td>
+        <td><a href="{% url "Contest:show_contest_notice" contest.cid cn.id %}">{{ cn.notice_title }}</a></td>
+        <td>{{ cn.notice_content }}</td>
+        {%if tpl.has_priv%}
+        <th><a href="{% url "Contest:update_contest_notice" cn.id contest.cid %}">修改</a></th>
+        {%endif%}
+    </tr>
+    {% endfor %}
+</table>
+</div>
+{% endif %}
+{%if tpl.has_priv or contest.status != 'scheduled'%}
+<div>
+<h2>题目列表</h2>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>题目</th>
+        <th>标题</th>
+        <th>时间限制</th>
+        <th>内存限制</th>
+        <th>通过数 / 提交数</th>
+        <th>通过率</th>
+    </thead>
+    {% for p in problem_list %}
+    <tr>
+        {% comment %}
+        <td>{%if p.user_res == 1%}<strong><center><font color=red>Yes</font></center></strong>{%endif%}</td>
+        {% endcomment %}
+        <td>{{ p.index }}</td>
+        <td><a href="{% url 'Problem:contest_problem' contest.cid p.index %}">{{ p.title }}</a></td>
+        <td>{{ p.tlim }}ms</td>
+        <td>{{ p.mlim }}KB</td>
+        <td>{{p.ac}} / {{p.sub}}</td>
+        <td>{{p.ratio|floatformat:2}} %</td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+{%endif%}
+{% endblock %}
+
+{% block ext-script %}
+<script type="text/javascript">
+    function postRequest() {
+        document.querySelector('#submit').disabled = true;
+        alert("完成查重后将自动跳转，请耐心等待...");
+        $.ajax({
+            type: "GET",
+            url: "{%url 'Cheat:add_cheat_record_2' contest.cid%}",
+            success: function() {
+                window.location.href = "{%url 'Cheat:show_cheat_result' contest.cid%}";
+            },
+            timeout: function() { $.ajax(this); }
+        });
+    }
+</script>
+{% endblock %}

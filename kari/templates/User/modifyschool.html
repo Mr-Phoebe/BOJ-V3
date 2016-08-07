@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %} 编辑学院 {% endblock %}
+
+{% block main-left %}
+
+<h3>编辑学院信息--{{school.name}}</h3>
+<form action="{% url 'User:modifyschool' school.id %}" method="POST">
+{%csrf_token%}
+    <p>学院名称：<input type="text" name="schoolname" value="{{school.name}}" /></p>
+    学院管理员：<select name="admin">
+    {% for admin in admin_cddt%}
+        <option value="{{admin.uid}}"> {{admin.username}} </option>
+    {%endfor%}
+    </select>
+    <p><input type="submit" value="提交" /></p>
+</form>
+{% endblock %}
+
+{% block main-right %}
+<p><a href="{% url 'User:manageschool' %}">返回学院管理列表</a></p>
+{% endblock %}

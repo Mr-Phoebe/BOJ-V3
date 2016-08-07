@@ -1,0 +1,21 @@
+<div style="width:540px;margin-left:auto;margin-right:auto;">
+    <div class="pull-left" style="width:272px;">
+        <h1 style="font-size:56px;line-height:72px;color:{%if err_title_color%}{{err_title_color}}{%else%}#b94a48{%endif%}">{{err_title}}</h1>
+        {% if errmsg %}
+        <p class="kari-err-msg">{{errmsg}}</p>
+        {% endif %}
+        {% for err in err_msg_list %}
+        <p class="kari-err-msg">{{err|safe}}</p>
+        {% empty %}
+        <p class="kari-err-msg">对不起，您遇到了逻辑错误。</p>
+        <p class="kari-err-msg">该错误通常是缺乏必要权限等原因导致的，请检视上面的错误信息并查阅用户手册以了解具体出错原因。</p>
+        {% endfor %}
+        {% if err_buglist %}
+        <p class="kari-err-msg">如果您对该错误有疑议，请向 <a href="mailto:buptacm-oj@googlegroups.com">问题反馈邮件组</a> 进行反馈。</p>
+        {% endif %}
+    </div>
+    <div class="pull-right" style="width:256px;">
+        <img src="{{err_img}}">
+    </div>
+</div>
+<div style="clear:both"></div>

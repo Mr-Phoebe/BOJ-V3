@@ -1,0 +1,56 @@
+{% extends "newtpl/course/course_class_base.html" %}
+
+{% block page-header %}
+<h1>成员列表 <small>{{course_class.getFullName}}</small></h1>
+{% endblock%}
+
+{% block pagination %}
+{% if student_list and student_list.paginator.num_pages > 1 %}
+{# we should put 'if' in the 'block', or the 'if' would not be rendered #}
+<div class="pagination pagination-centered">
+    <ul>
+        {% if student_list.has_previous %}
+        <li><a href="{% url 'Course:students' course_class.id student_list.previous_page_number %}">&laquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo;</a></li>
+        {% endif %}
+
+        {% for p in student_list.paginator.page_range %}
+        {% if p == student_list.number %}
+        <li class="disabled"><a href="#">{{ p }}</a></li>
+        {% else %}
+        <li><a href="{% url 'Course:students' course_class.id p %}">{{ p }}</a></li>
+        {% endif %}
+        {% endfor %}
+
+        {% if student_list.has_next %}
+        <li><a href="{% url 'Course:students' course_class.id student_list.next_page_number %}">&raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block list_content %}
+<h2>成员列表：本页共{{ student_list|length }}名成员</h2>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>ID</th>
+        <th>名称</th>
+        <th>所属本课程的班级</th>
+    </thead>
+    {% for student in student_list %}
+    <tr>
+        <td>{{ student.uid }}</td>
+        <td><a href="{% url 'User:viewuser' student.uid %}">{{ student.username }}</a></td>
+        <td>
+            {% for g in student.groups %}
+            <a href="{#% url 'User:' group.id %#}">{{ g.name }}</a>
+            {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

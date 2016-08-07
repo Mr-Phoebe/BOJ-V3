@@ -1,0 +1,77 @@
+{% extends "newtpl/problem/listBase.html" %}
+{% block title %}题目列表{% endblock %}
+{% block page-header %}
+    <h1>题目列表</h1>
+{% endblock %}
+{% block prob-info %}
+        {% if problems and problems.paginator.num_pages > 1 %}
+        <div class="pagination pagination-centered">
+            <ul>
+            {% if problems.has_previous %}
+             <li><a href="{% url 'Problem:list' problems.previous_page_number %}">&laquo;</a></li>
+             {% else %}
+            <li class="disabled"><a href="#">&laquo;</a></li>
+            {% endif %}
+
+            {% for p in problems.paginator.page_range %}
+            {% if p == problems.number %}
+            <li class="disabled"><a href="#">{{ p }}</a></li>
+            {% else %}
+            <li><a href="{% url 'Problem:list' p %}">{{p}}</a></li>
+            {% endif %}
+            {% endfor %}
+
+            {% if problems.has_next %}
+            <li><a href="{% url 'Problem:list' problems.next_page_number %}">&raquo;</a></li>
+            {% else %}
+        <li class="disabled"><a href="#">&raquo;</a></li>
+        {% endif %}
+        </ul>
+</div>    
+
+{%endif%}
+
+<table class="table table-bordered table-condensed">
+            <thead>
+                <th></th>
+                <th>ID</th>
+                <th>题目</th>
+                <th>通过数 / 提交数</th>
+                <th>通过率</th>
+                {% if manage %}
+                <th></th>
+                {% endif %}
+            </thead>
+            {% for p in problems %}
+            <tr>
+                <td></td>
+                <td><a href="{%url 'Problem:problem' p.prob.pid %}" class="id">{{ p.prob.pid }}</a></td>
+                <td><a href="{%url 'Problem:problem' p.prob.pid %}">{{ p.prob.prob_title }}</a></td>
+                <td>{{ p.accepts }} / {{ p.submits }}</td>
+                <td>{{ p.ratio }}%</td>
+                {% if manage %}
+                <td><a href="{% url 'Problem:updateproblem' p.prob.pid %}">修改题目</a></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+{% endblock %}
+
+{% block prob-info-ext %}
+<!-- contest_notice -->
+<script type="text/javascript">
+    function trans(str) {
+        while(str.length<4) {
+            str = '0'+str;
+        }
+        return str;
+    }
+    var ids = document.querySelectorAll('a.id')
+    for(i = 0;i<ids.length;++i) {
+        ids[i].innerHTML = trans(ids[i].innerHTML)
+        }
+</script>
+{% endblock %}
+
+{% block main-right %}
+{% endblock %}

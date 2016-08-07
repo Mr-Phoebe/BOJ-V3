@@ -1,0 +1,37 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %}管理员列表{% endblock %}
+{%block page-header%}
+<h1>管理员列表 <small>{{user.university.fullname}}</small></h1>
+{%endblock%}
+
+{% block admin-form %}
+<table class="table table-bordered table-striped table-hover">
+    <thead><tr>
+        <th>用户名</th>
+        <th>所属学院</th>
+        <th>权限等级</th>
+        <th>修改</th>
+    </tr></thead>
+    <tbody>
+        {% for u in alladmin %}
+        <tr>
+        <td>{{u.username}}</td>
+        <td>{%if u.school%}{{u.school.fullname}}{%else%}None{%endif%}</td>
+        <td>{% with pr=u.priv %}
+        {%if pr == 'university' %}学校管理员
+        {%elif pr == 'school' %}学院管理员
+        {%elif pr == 'course' %}课程管理员
+        {%elif pr == 'courseclass' %}课程分班管理员
+        {%elif pr == 'group' %}分组管理员
+        {%endif%}{%endwith%}</td>
+        <td><a href="/user/viewuser/{{u.uid}}">修改</a></td>
+        </tr>
+        {%endfor%}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block admin-access %}
+<a class="btn btn-primary btn-block" href="{%url 'User:addadmin'%}">添加管理员</a>
+{% endblock %}

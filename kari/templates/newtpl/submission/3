@@ -1,0 +1,73 @@
+{% extends "newtpl/base.html" %}
+
+{% block title %} 提交 {{submission.sid}}. - kAri Online Judge{% endblock %}
+
+{% block main-left %}
+
+{% block modify-css %}
+<style>
+li.L0, li.L1, li.L2, li.L3,
+li.L5, li.L6, li.L7, li.L8
+{ list-style-type: decimal !important }
+</style>
+{% endblock modify-css %}
+
+{% block info %}
+{% with c=submission.problem_index.contest idx=submission.problem_index.problem_index %}
+
+    <h1>查看提交详情</h1>
+    <div >
+    <table class="info">
+        <colgroup>
+            <col class="column_1">
+            <col class="column_2">
+        </colgroup>
+        <tbody>
+            <tr><td class="column_1">提交用户</td> <td class=column_2>{{ submission.user.username }}</td></tr>
+            <tr><td class="column_1">题目</td> <td class=column_2>{{ submission.user.username }}</td></tr>
+        </tbody>
+    </table>
+
+    <h3>提交用户: {{ submission.user.username}} &nbsp;&nbsp;  题目: <a href="{% url 'Problem:contest_problem' c.cid idx %}">{{ submission.problem_index }}</a></h3>
+    <div>
+        <p> 提交编号 {{ submission.sid }}  提交IP: {% if info.submit_ip %} {{ info.submit_ip }} {% else %} 提交者IP地址未记录 {% endif %} </p>
+        <h3><p> 结果: <strong><span class="{{ info.status_color }}"> {{ info.status_cn }}</span></strong></p></h3>
+        <p> 运行时间: {{ info.run_time }} ms 占用内存: {{ info.run_memory }} kb
+        {% if "ce" in info %}<p>编译错误信息: <pre class="prettyprint lang-shell linenums">{{ info.ce }}</pre></p>{% endif %}
+        <p>数据组数: {{ info.data_cnt }}</p>
+        {% if "case_judged" in info %}
+        <p>已判组数: {{ info.case_judged }} 总分: {{ info.score }} / {{ info.score_sum }} </p> 
+        {% if info.case_result %}
+        {% for seq in info.case_result %}
+        <p>第{{ forloop.counter }}组结果: {{ seq.res_cn }}  运行时间: {{ seq.time }} ms     占用内存: {{ seq.mem }} kb     {% if seq.score %} 分数: {{ seq.score }}{% endif %}</p>
+        {% endfor %}
+        {% endif %}
+        {% endif %}
+    </div>
+{% endwith %}
+{% endblock info %}
+
+{% block code %}
+<div>
+代码<small>（行号在复制的时候不会被错误的包含进去）</small>:
+    <pre class="prettyprint linenums">
+{{ code_content }}
+    </pre>
+</div>
+{% endblock code %}
+
+{% endblock %}
+
+{% block main-right %}
+{% with c=submission.problem_index.contest %}
+<div class="well">
+    <a class="btn btn-primary btn-block" href="{% url 'Submission:contest_status' c.cid %}{{ status_query }}">结果列表</a>
+    <a class="btn btn-info btn-block" href={%url 'Contest:show_contest' c.cid%}>&laquo;返回测验首页</a>
+</div>
+{% endwith %}
+{% endblock %}
+
+{% block ext-script %}
+{#<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>#}
+<script src="/static/js/google-code-prettify/run_prettify.js"></script>
+{% endblock %}

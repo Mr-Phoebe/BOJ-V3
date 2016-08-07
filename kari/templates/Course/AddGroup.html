@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %} 添加群组 {% endblock %}
+
+{% block main-left %}
+
+<h3>添加群组</h3>
+<form action="/user/add/group/" method="POST">
+{%csrf_token%}
+    <p>群组名称：<input type="text" name="groupname" /></p>
+    <p>所属学院：<select name="school">
+    {% for s in school_cddt%}
+        <option value="{{s.id}}"> {{s.name}} </option>
+    {%endfor%}
+    </select></p>
+    <p><input type="submit" value="提交" /></p>
+</form>
+{% endblock %}
+
+{% block main-right %}
+    
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "newtpl/base.html" %}
+
+{% block title %} 查重对比 {{ sub_a.sid }}-{{ sub_b.sid }}. - kAri Online Judge{% endblock %}
+{% block main-left %}
+
+<h1>代码查重分析</h1>
+<h3>代码相似度: {{ct_obj.ratio|floatformat:2}}%</h3>
+
+<div class="container-fluid">
+<div class="row-fluid">
+    {% block code_a %}
+        <div class="span6">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>提交编号</td>
+                        <td><a href="{% url 'Submission:code_and_info' sub_a.sid %}">{{ sub_a.sid }}</a></td>
+                    </tr>
+                    <tr>
+                        <td>用户</td>
+                        <td><a href="{% url 'User:viewuser' sub_a.user.uid %}">{{ sub_a.user.username }}</a></td>
+                    </tr>
+                    <tr>
+                        <td>IP地址</td>
+                        <td>{{ ip_a }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <pre class="prettyprint">{{ code_a }}</pre>
+    </div>
+    {% endblock code_a %}
+
+    {% block code_b %}
+        <div class="span6">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>提交编号</td>
+                        <td><a href="{% url 'Submission:code_and_info' sub_b.sid %}">{{ sub_b.sid }}</a></td>
+                    </tr>
+                    <tr>
+                        <td>用户</td>
+                        <td><a href="{% url 'User:viewuser' sub_b.user.uid %}">{{ sub_b.user.username}}</a></td>
+                    </tr>
+                    <tr>
+                        <td>IP地址</td>
+                        <td>{{ ip_b }}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <pre class="prettyprint">{{ code_b }}</pre>
+        </div>
+    {% endblock code_b %}
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% comment %}
+{% with c=submission.problem_index.contest %}
+<div class="well">
+    <a class="btn btn-info btn-block" href="{% url 'Submission:contest_status' c.cid %}{{ status_query }}">结果列表</a>
+    <a class="btn btn-block" href={%url 'Contest:show_contest' c.cid%}>&laquo;返回测验首页</a>
+</div>
+{% endwith %}
+{% endcomment %}
+
+{%block ext-script%}
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+{#<script src="/static/js/google-code-prettify/run_prettify.js"></script>#}
+{%endblock%}

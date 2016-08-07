@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %} 学院{{ school.name }}信息 {% endblock %}
+
+{% block main-left %}
+<h2> 学院 {{ school.fullname }} </h2>
+<h3> 缩写：{{ school.name }} </h3>
+<h3> 所属学校：{{ school.university }} </h3>
+<h3> 管理员：{% if school.admin %}<a href="{% url 'User:viewuser' school.admin.uid %}" target="blank">{{ school.admin }}</a>{% else %} 无 {% endif %} </h3>
+<h3> 课程列表：共{{ courses|length }}门课 </h3>
+<table class="table table-striped table-bordered">
+    <th width="10%">ID</th>
+    <th width="10%">编号</th>
+    <th width="10%">名称</th>
+    <th width="{% if template_tags.can_modify %}20%{% else %}10%{% endif %}">管理员</th>
+    {% if template_tags.can_modify %}
+    <th width="10%">修改课程</th>
+    <th width="10%">删除课程</th>
+    {% endif %}
+    {% for course in courses %}
+    <tr>
+        <td> {{ forloop.revcounter }} </td>
+        <td> {{ course.no }} </td>
+        <td><a href="{% url 'Course:showCourse' course.id %}"> {{ course.name }} </a></td>
+        <td> {% if course.admin %}<a href="{% url 'User:viewuser' course.admin.uid %}" target="blank">{{ course.admin }}</a>{% else %} 无 {% endif %}</td>
+        {% if template_tags.can_modify %}
+        <td><a href="{% url 'Course:updateCourse' course.id %}"> 修改课程 </a></td>
+        <td><a href="{% url 'Course:deleteCourse' course.id %}"> 删除课程 </a></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+
+{% block main-right %}
+<p><a href="{% url 'Course:addCourse' school.id %}"> 添加课程 </a></p>
+{% ifequal user.priv "university" %}
+<p><a href="{% url 'User:modifyschool' school.id %}"> 修改学院 </a></p><p
+<p><a href="{% url 'User:manageschool' %}"> 返回我管理的学院列表 </a></p>
+{% endifequal %}
+{% endblock %}

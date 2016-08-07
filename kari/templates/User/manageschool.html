@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %} {% if just_list %}我管理的{% endif %}学院管理 {% endblock %}
+
+{% block main-left %}
+<h3>学院列表：共{{ school_list|length }}个学院 </h3>
+<table class="table table-striped table-bordered">
+    <th width="10%">编号</th>
+    <th width="10%">简称</th>
+    <th width="10%">称名</th>
+    {% if not just_list %}
+    <th width="10%">管理员</th>
+    <th width="10%">修改学院</th>
+    {% endif %}
+    {% for s in school_list %}
+    <tr>
+        <td> {{ s.id }} </td>
+        <td> {{s.name}}</td>
+        <td> <a href="{% url 'User:show_school' s.id %}">{{s.fullname}}</a></td>
+        {% if not just_list %}
+        <td>管理员：{% if s.admin %}<a href="{% url 'User:viewuser' s.admin.uid %}">{{s.admin.username}} </a>{% else %}无{% endif %}</td>
+        <td><a href="{% url 'User:modifyschool' s.id%}">修改</a></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+
+{% block main-right %}
+{% if not just_list%}
+<p><a href="{% url 'User:addschool' %}">添加学院</a></p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "newtpl/base.html" %}
+{% block title %}排行榜{% endblock %}
+
+{% block main %}
+
+<div class="page-header">
+    {%if tpl.has_priv %}
+    <a class="btn btn-info pull-right" href="{% url 'Course:showCourseClassContests' contest.course_class.id %}">&laquo;返回分班</a>
+    <a class="btn pull-right" href="{% url 'Contest:add_contest_notice' contest.cid %}">添加公告</a>
+    <a class="btn btn-primary pull-right" href="{% url 'Contest:update_contest' contest.cid %}">修改测验</a>
+    {%endif%}
+    <h1>排行榜 <small>{{contest.contest_title}}</small> </h1>
+</div>
+<ul class="nav nav-pills">
+    <li><a href="{%url 'Contest:show_contest' contest.cid%}">测验首页</a></li>
+    <li><a href="{%url 'Submission:contest_status' contest.cid%}">结果列表</a></li>
+    <li><a href="{%url 'Contest:view_all_clars' contest.cid%}">提问列表</a></li>
+    <li class="active"><a href="{{request.get_full_path}}">排行榜</a></li>
+</ul>
+{%if tpl.has_priv or contest.status != 'scheduled'%}
+<div ng-app="boardApp">
+    <div ng-controller="DynamicScoreCtrl">
+        {% verbatim %}
+        <table class="table table-bordered table-striped table-hover table-condensed">
+            <thead>
+                <th style="width:4em;">排名</th>
+                <th style="text-align:left;">用户</th>
+                <th style="width:4em;">得分</th>
+                <th style="width:6em;" ng-repeat="problem in problems">{{problem.idx}}({{problem.total_score}})</th>
+            </thead>
+            <tr ng-repeat="user in users">
+                <td>{{user.rank}}</td>
+                <td style="text-align:left;padding-left:1em;">{{user.username}}</br>{{user.nickname}}</td>
+                <td>{{user.score}}</td>
+                <td ng-repeat="problem_info in user.problem_infos" ng-class="problem_info.ac >=1 ? 'kari-board-ac' : (problem_info.ac < 0 ? 'kari-board-noac' : '')">{{problem_info.score}}</td>
+            </tr>
+        </table>
+        {% endverbatim %}
+    </div>
+</div>
+{%endif%}
+{% endblock %}
+{% block ext-script %}
+{% load staticfiles %}
+<script src="{% static "angular/angular.min.js" %}"></script>
+<script src="{% static "angular/angular-resource.min.js" %}"></script>
+<script src="{% static "js/board.js" %}"></script>
+<script type="text/javascript">
+    angular.module('boardApp').constant("DjangoConstants", {
+        cid: '{{contest.cid}}'
+    });
+</script>
+{% endblock %}

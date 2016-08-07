@@ -1,0 +1,24 @@
+{% extends "newtpl/fresh/base.html" %}
+{% block title %}队伍登录{% endblock %}
+{% block main %}
+<h2 class="form-signin-heading">队伍登录
+    <hr />
+</h2>
+<div class="log-page">
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td width="30%">队伍名称</td>
+                <td><input type="text" class="input-block-level" name="name" placeholder="队伍名称" maxlength="30" autofocus required></td>
+            </tr>
+            <tr>
+                <td width="30%">登录密码</td>
+                <td><input type="password" class="input-block-level" name="passwd" placeholder="登录密码" maxlength="30" required></td>
+            </tr>
+        </table>
+        <hr />
+        <button class="btn btn-large btn-info" type="submit">登录</button>
+    </form>
+</div>
+{% endblock %}

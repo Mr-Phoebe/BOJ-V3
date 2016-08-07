@@ -1,0 +1,128 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %}
+{# with can only be used in block #}
+{{ problem.prob_title }}
+{% endblock %}
+
+{% block page-header %}
+ <h1>{{ problem.prob_title }} <small>{{ problem.pid }}</small> </h1>
+{% endblock page-header %}
+
+{% block admin-access %}
+{% with pid=problem.pid %}
+<a class="btn btn-primary btn-block" href="{% url 'Submission:general_submit' pid %}">提交代码</a>
+<a class="btn btn-info btn-block" href={%url 'Problem:problem' pid %}>返回题目</a>
+<a class="btn btn-info btn-block" href="{% url 'Submission:status' %}{{ status_query }}">结果列表</a>
+{% endwith %}
+{% endblock admin-access %}
+
+{% block admin-form %}
+
+{% block info %}
+{% with p=problem %}
+
+<span><strong>时间限制: </strong>{{ p.prob_time }} ms</span>
+<span><strong>内存限制: </strong>{{ p.prob_memory }} KB</span>
+{% if p.is_spj %}
+<span><strong>Special Judge </strong></span>
+{% endif %}
+
+{% endwith %}
+{% endblock info %}
+
+{% block graph %} 
+<h1>统计图表<h1>
+
+<div id="graphpie" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+
+{% endblock graph %}
+{% block content %} 
+<h1>正确提交</h1>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>排名</th>
+        <th>用户</th>
+        <th>时间</th>
+        <th>内存</th>
+        <th>语言</th>
+        <th>代码长度</th>
+        <th>提交时间</th>
+    </thead>
+    {% for s in submissions %}
+    {% with idx=s.problem.pid %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td><a href="{% url 'User:viewuser' s.user.uid %}">{{ s.user.username }}</a></td>
+        <td><span class="">{{ s.run_time }} ms</span></td>
+        <td>{{ s.run_memory}} KB</td>
+        <td>{{ s.get_code_language_display }}</td>
+        <td><a href="{% url 'Submission:general_code_and_info' s.id %}" > {{ s.code_length}} B</a></td>
+        <td>{{ s.submission_time|date:"Y-m-d H:i:s" }}</td>
+    </tr>
+    {% endwith %}
+    {% endfor %}
+</table>
+
+{% endblock content %}
+
+{% endblock admin-form %}
+{% block ext-script %}
+		<script type="text/javascript">
+            $(function () {
+                    $('#graphpie').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: '本题的结果分布'
+            },
+            tooltip: {
+        	    pointFormat: '{series.name}: <b>{point.y} </b>',
+            	percentageDecimals: 1,
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ Highcharts.numberFormat(this.percentage, 1, '.') +' %';
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '提交数',
+                data: [
+                    {% for status in status_list %}
+                      {% if status.name != '通过' %}
+                      {% if status.number > 0 %}
+                      [ '{{ status.name}}', {{ status.number }}],
+                          {% endif %}
+                      {% else %}
+                      {% if status.number > 0 %}
+                      { name: '{{ status.name}}', 
+                        y: {{ status.number }},
+                        sliced: true,
+                        selected: true
+                      },
+                          {% endif %}
+                      {% endif %}
+                      {% endfor %}
+                ]
+            }]
+        });
+    });
+    
+
+		</script>
+<script src="/static/js/highcharts/highcharts.js"></script>
+<script src="/static/js/highcharts/modules/exporting.js"></script>
+{% endblock %}

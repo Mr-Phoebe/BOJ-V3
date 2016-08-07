@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %} 课程列表 {% endblock %}
+
+{% block main-left %}
+{% if fake %}
+<div class="pagination">
+    {% if contestList.has_previous %}
+    <a href="/Contest/list/{{ contestList.previous_page_number }}/" title="Pre">上一页</a>
+    {% endif %}
+    {% for p in page_range %}
+    {% ifequal p contestList.number %}
+    <span style="font-size:16px;" title="当前页"><b>{{ p }}</b></span>        
+    {% else %}
+    <a href="/Contest/list/{{ p }}/" title="第{{ p }}页">{{ p }}</a>
+    {% endifequal %}
+    {% endfor %}     
+    {% if contestList.has_next %}
+    <a href="/Contest/list/{{ contestList.next_page_number }}/" title="Next">下一页</a>
+    {% endif %}  
+    <b>
+        {%if contestList.paginator.num_pages %}
+        共 {{ contestList.paginator.num_pages }} 页
+        {% endif %}
+    </b>
+</div>
+{% endif %}
+<h2> {{ user.username }}所管理的课程列表 </h2> 
+<table class="table table-striped table-bordered">
+    <th width="10%">ID</th>
+    <th width="10%">编号</th>
+    <th width="30%">名称</th>
+    <th width="{% if template_tags.can_set_admin %}20%{% else %}10%{% endif %}">管理员</th>
+    {% if template_tags.can_modify %}
+    <th width="10%">修改课程</th>
+    <th width="10%">删除课程</th>
+    {% endif %}
+    {% for course in courses %}
+    <tr>
+        <td> {{ forloop.revcounter }} </td>
+        <td><a href="{% url 'Course:showCourse' course.id %}"> {{ course.no }} </a></td>
+        <td><a href="{% url 'Course:showCourse' course.id %}"> {{ course.name }} </a></td>
+        <td>{% if course.admin %}<a href="{% url 'User:viewuser' course.admin.uid %}"> {{ course.admin }}</a>{% else %}无{% endif %}{% if template_tags.can_set_admin %}<a href="{% url 'Course:updateCourse' course.id %}"> 修改 </a>{% endif %}</td>
+        {% if template_tags.can_modify %}
+        <td><a href="{% url 'Course:updateCourse' course.id %}"> 修改课程 </a></td>
+        <td><a href="{% url 'Course:deleteCourse' course.id %}"> 删除课程 </a></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+{% block main-right %}
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %} 重置密码 {% endblock %}
+{% block page-header %}
+<h1>重置密码</h1>
+{% endblock %}
+
+{% block admin-form %}
+<form action="/user/reset/{{resetuser.uid}}" method="POST">
+    {% csrf_token %}
+    <table class="table table-hover" style="width:400px">
+        <tr>
+            <td style="width:30%">用户名</td>
+            <td>{{ resetuser.username }}</td>
+        </tr>
+        <tr>
+            <td style="width:30%">密码</td>
+            <td><input type="password" name="passwd1"></td>
+        </tr>
+        <tr>
+            <td style="width:30%">重复密码</td>
+            <td><input type="password" name="passwd2"></td>
+        </tr>
+    </table>
+    <p><input class="btn btn-primary"type="submit" value="   提交   " /></p>
+</form>
+{% endblock %}
+

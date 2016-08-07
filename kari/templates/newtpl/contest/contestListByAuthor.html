@@ -1,0 +1,25 @@
+{% extends "newtpl/contest/contestListBase.html" %}
+{% block pagination %}
+<ul>
+    {% if contest_list.has_previous %}
+    <li><a href="{% url 'Contest:list_user_contest_myself' contest_list.previous_page_number %}">&laquo;</a></li>
+    {% else %}
+    <li class="disabled"><a href="#">&laquo;</a></li>
+    {% endif %}
+
+    {% for p in contest_list.paginator.page_range %}
+    {% if p == contest_list.number %}
+    <li class="disabled"><a href="#">{{ p }}</a></li>
+    {% else %}
+    <li><a href="{% url 'Contest:list_user_contest_myself' p %}">{{ p }}</a></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if contest_list.has_next %}
+    <li><a href="{% url 'Contest:list_user_contest_myself' contest_list.next_page_number %}">&raquo;</a></li>
+    {% else %}
+    <li class="disabled"><a href="#">&raquo;</a></li>
+    {% endif %}
+</ul>
+{% endblock %}
+{% block no-contest-message %}您暂时没有创建过测验{% endblock %}

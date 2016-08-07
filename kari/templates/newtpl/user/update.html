@@ -1,0 +1,29 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %} 修改用户信息 {% endblock %}
+
+{% block admin-form %}
+<h3>修改用户信息</h3>
+<form action="/user/update/" method="POST">
+    {% csrf_token %}
+    <table class='table table-border table-striped'>
+    <tr><td>用户名</td><td>{{ user.username }}</td></tr>
+    <tr><td>昵称</td><td><input type="text" name="nickname" value="{{user.nickname }}"/></td></tr>
+    <tr><td>密码</td><td><input type="password" name="passwd" /></td></tr>
+    <tr><td>重复密码</td> <td><input type="password" name="passwd2" /></td></tr>
+    <tr><td>Email</td><td><input type="text" name="email" value="{{ user.email }}"/></td></tr>
+    <tr><td>性别</td>
+    <td><select type="text" name="gender">
+        <option value="Male" {%ifequal user.gender 'Male' %} selected {% endifequal %}>男</option>
+        <option value="Female" {%ifequal user.gender 'Female' %} selected {% endifequal %}>女</option>
+        <option value="Secret" {%ifequal user.gender 'Secret' %} selected {% endifequal %}>私密</option>
+    </select></td>
+    </tr>
+    </table>
+    <p><input type="submit" value="提交" /></p>
+</form>
+{% endblock %}
+
+{% block admin-access %}
+    <a href='/user/' class='btn btn-block'>返回用户信息页面</a>
+{% endblock %}

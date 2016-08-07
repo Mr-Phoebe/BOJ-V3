@@ -1,0 +1,38 @@
+{% extends "newtpl/admin.html" %}
+
+{% block title %}{{ course.getFullName }}{% endblock %}
+
+{% block page-header %}
+<h1>{{ course.getFullName }} <small>{{ course.school.name }}</small> </h1>
+{% endblock page-header %}
+
+{% block admin-access %}
+{% if tpl.can_modify %}
+<a class="btn btn-warning btn-block" href="{% url 'Course:updateCourse' course.id %}">修改课程</a>
+{#<a class="btn btn-danger btn-block" href="{% url 'Course:deleteCourse' course.id %}">删除课程</a>#}
+<a class="btn btn-primary btn-block" href="{% url 'Problem:addproblem' course.id %}">添加题目</a>
+<a class="btn btn-primary btn-block" href="{% url 'Course:addCourseClass' course.id %}">添加分班</a>
+<a class="btn btn-info btn-block" href="{% url 'User:show_school' course.school.id %}">&laquo;返回学院</a>
+{% else %}
+<a class="btn btn-primary btn-block" href="{% url 'Problem:addproblem' course.id %}">添加题目</a>
+{% endif %}
+{% endblock %}
+
+{% block admin-form %}
+
+<ul class="nav nav-pills">
+    <li{% ifequal tpl.page_selected "index" %} class="active"{% endifequal %}><a href="{% url 'Course:showCourse' course.id %}">课程首页</a></li>
+    <li{% ifequal tpl.page_selected "class" %} class="active"{% endifequal %}><a href="{%url 'Course:courseClasses' course.id%}">分班列表</a></li>
+    <li{% ifequal tpl.page_selected "problem" %} class="active"{% endifequal %}><a href="{%url 'Course:courseProblems' course.id%}">题目列表</a></li>
+</ul>
+
+{% block detailed_info %}
+{% endblock %}
+
+{% block pagination %}
+{% endblock %}
+
+{% block list_content %} {% endblock %}
+
+{% endblock admin-form %}
+

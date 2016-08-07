@@ -1,0 +1,44 @@
+{% extends "newtpl/base.html" %}
+{% block title %}测验列表{% endblock %}
+{% block main %}
+<div class="page-header">
+{% block page-header %}
+    <h1>测验列表</h1>
+{% endblock page-header %}
+</div>
+{% if contest_list and contest_list.paginator.num_pages > 1 %}
+<div class="pagination pagination-centered">
+{% block pagination %}{% endblock pagination %}
+</div>
+{% endif %}
+{% block contest-list %}
+<div class="row"><div class="span12">
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <th>ID</th>
+        <th>课程分班</th>
+        <th>标题</th>
+        <th>开始时间</th>
+        <th>时长</th>
+        <th>状态</th>
+        {% if tpl.has_priv %}
+        <th>修改测验</th>
+        {% endif %}
+    </thead>
+    {% for c in contest_list %}
+    <tr>
+        <td>{{ c.cid }}</td>
+        <td><a href='{% url 'Course:showCourseClass' c.course_class.id %}'>{{ c.course_class_name }}</a></td>
+        <td><a href="{% url 'Contest:show_contest' c.cid %}">{{ c.title }}</a></td>
+        <td>{{ c.start_time|date:"Y-m-d H:i:s" }}</td>
+        <td>{{ c.length }} 分钟</td>
+        <td>{% if c.status == 'ended' %}已结束{% elif c.status == 'running' %}进行中{% else %}未开始{% endif %}</td>
+        {% if tpl.has_priv %}
+        <td><a href="{% url 'Contest:update_contest' c.cid %}">修改测验</a></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+</div></div>
+{% endblock contest-list %}
+{% endblock main %}

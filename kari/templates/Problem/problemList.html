@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} 题目列表 {% endblock %}
+
+{% block main-left %}
+
+{% for p in res %}
+<p><a href="{% url 'Problem:problem' p.pid %}">{{ p.pid }} {{ p.prob_title }}</a>
+<a href="{% url 'Problem:updateproblem' p.pid %}">修改题目</a>
+</p>
+{% endfor %}
+
+{% endblock %}
+
+{% block main-right %}
+{% endblock %}
+

@@ -1,0 +1,31 @@
+{% extends "newtpl/base.html" %}
+
+{% block title %}提交代码{% endblock %}
+
+{% block main-left %}
+<div class="page-header">
+    <h1>提交代码 <small>{{problem.pid }}. {{ problem.prob_title }}</small></h1>
+</div>
+
+<form action="{% url 'Submission:general_submit' problem.pid %}" method="POST"
+    {% if form.is_multipart %} enctype="multipart/form-data" {% endif %}>
+    {% csrf_token %}
+    {{form.language.label_tag}}
+    {{form.language}}
+    {{form.code_file.label_tag}}
+    {{form.code_file}}
+    {{form.code.label_tag}}
+    {{form.code}}
+    <div>
+        <input class="btn btn-primary" type="submit" value="提交">
+        <input class="btn" type="reset" value="重置">
+    </div>
+</form>
+{% endblock %}
+
+{% block main-right %}
+<div class="well">
+    <a class="btn btn-primary btn-block" href="{% url 'Problem:problem' problem.pid %}{{ status_query }}">&laquo;返回题目</a>
+    <a class="btn btn-info btn-block" href={%url 'Submission:status' %}>&laquo;返回结果列表</a>
+</div>
+{% endblock %}
