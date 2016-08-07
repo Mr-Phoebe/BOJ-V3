@@ -66,7 +66,7 @@ def teamRegister(request):
             team = Team.addTeam(name, passwd1)
 
             # Success
-            messages.add_message(request, messages.SUCCESS, u'%s队伍注册成功！请登录后添加队员信息' % name)
+            messages.add_message(request, messages.SUCCESS, u'%s注册成功！请登录后完善个人信息。' % name)
             request.session['team_id'] = team.pk
             return redirect('Register:team_info', team.pk) # TO BE FIXED
         else:
@@ -86,7 +86,7 @@ def teamInfo(request, tid):
         return redirect('Register:team_login')
     try:
         if team.pk != tid:
-            raise Exception(u'您没有查看该队伍信息的权限！')
+            raise Exception(u'您没有查看该队员信息的权限！')
         target_team = Team.getById(tid)
         members = Contestant.getTeamContestant(target_team)
         full = True if len(members) >= 3 else False
@@ -108,7 +108,7 @@ def addTeamMember(request, tid):
 
     try:
         if team.pk != tid:
-            raise Exception(u'您没有查看该队伍信息的权限！')
+            raise Exception(u'您没有查看该队员信息的权限！')
         
         target_team = Team.getById(tid)
         if request.method != 'POST':
@@ -124,12 +124,13 @@ def addTeamMember(request, tid):
             student_id = form.cleaned_data['student_id']
             class_id = form.cleaned_data['class_id']
             school = form.cleaned_data['school']
-            Contestant.addContestant(name, gender, grade, email, mobile, student_id, class_id, school, target_team)
+            info = form.cleaned_data['info']
+            Contestant.addContestant(name, gender, grade, email, mobile, student_id, class_id, school, info, target_team)
         else:
-            raise Exception(u'输入的内容不合法！')
+            raise Exception(u'输入信息不合法！')
 
         # Success
-        messages.add_message(request, messages.SUCCESS, u'添加队员%s成功！请等待管理员审核' % name)
+        messages.add_message(request, messages.SUCCESS, u'完善信息成功！请等待管理员审核')
         target_team.status = '等待审核'
         target_team.updateStatus('Pending')
         return redirect('Register:team_info', tid)
@@ -152,7 +153,7 @@ def modifyTeamMember(request, cid):
         contestant = Contestant.getById(cid)
         belong_team = contestant.team
         if team.pk != belong_team.pk:
-            raise Exception(u'您没有查看该队伍信息的权限！')
+            raise Exception(u'您没有查看该队员信息的权限！')
         
         if request.method != 'POST':
             return render(request, 'newtpl/register/modify_member.html', {'gender_choices': Const.GENDER_CHOICES, 'school_choices': Const.SCHOOL_CHOICES, 'grade_choices': Const.GRADE_CHOICES, 'contestant': contestant})
@@ -167,12 +168,13 @@ def modifyTeamMember(request, cid):
             student_id = form.cleaned_data['student_id']
             class_id = form.cleaned_data['class_id']
             school = form.cleaned_data['school']
-            contestant.modifyContestant(name, gender, grade, email, mobile, student_id, class_id, school, belong_team)
+            info = form.cleaned_data['info']
+            contestant.modifyContestant(name, gender, grade, email, mobile, student_id, class_id, school, info, belong_team)
         else:
             raise Exception(u'输入的内容不合法！')
 
         # Success
-        messages.add_message(request, messages.SUCCESS, u'修改队员%s成功！请等待管理员审核' % name)
+        messages.add_message(request, messages.SUCCESS, u'修改队员信息%s成功！请等待管理员审核' % name)
         belong_team.updateStatus('Pending')
         return redirect('Register:team_info', belong_team.pk)
     except Exception as e:
@@ -258,6 +260,16 @@ def viewAcceptedTeams(request):
         messages.add_message(request, messages.INFO, unicode(e))
         return redirect('Register:view_accepted_teams')
 
+def deleteAll(request):
+    logger.info(unicode(request).replace('\n', '\t'))
+    try:
+        Team.delAllTeam();
+        Contestant.delAllContestant();
+        return redirect('Register:view_teams')
+    except Exception as e:
+        logger.error('delete FAILED!')
+        return redirect('Register:view_teams')
+
 def adminLogin(request):
     logger.info(unicode(request).replace('\n', '\t'))
     try:
@@ -292,14 +304,17 @@ def judgeTeam(request, tid = 1):
         if not admin:
             messages.add_message(request, messages.INFO, u'Not admin!')
             return redirect('Register:admin_login')
-
+        
         tid = int(tid)
         team = None
         while True:
+            if tid > Team.getMaxId():
+                raise Exception('No Pending Teams!')
             try:
                 team = Team.getById(tid)
             except:
-                raise Exception('No Pending Teams!')
+                tid += 1
+                continue
             if team.status == 'Skipped' or team.status == 'Pending':
                 break
             tid += 1
@@ -336,7 +351,7 @@ def judgeTeamResult(request, tid, result):
         tid = int(tid)
         team = Team.getById(tid)
         team.updateStatus(result)
-        return redirect('Register:judge_team')
+        return redirect('Register:judge_team', tid = tid+1)
     except Exception as e:
         logger.error(unicode(e).replace('\n', '\t'))
         messages.add_message(request, messages.WARNING, unicode(e))

@@ -1,0 +1,28 @@
+{% extends "newtpl/register/base.html" %}
+{% block title %}注册{% endblock %}
+{% block main %}
+<h2 class="form-signin-heading">注册
+    <hr />
+</h2>
+<div class="log-page">
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>ID(昵称)</td>
+                <td><input type="text" class="input-block-level" name="name" placeholder="ID不超过30个字符，不能包含空格" maxlength="30" autofocus required></td>
+            </tr>
+            <tr>
+                <td>登录密码</td>
+                <td><input type="password" class="input-block-level" name="passwd1" placeholder="登录密码，在6到30位之间" maxlength="30" required></td>
+            </tr>
+            <tr>
+                <td>请确认密码</td>
+                <td><input type="password" class="input-block-level" name="passwd2" placeholder="请再次确认密码" maxlength="30" required></td>
+            </tr>
+        </table>
+        <hr />
+        <button class="btn btn-large btn-success" type="submit">注册</button>
+    </form>
+</div>
+{% endblock %}

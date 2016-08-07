@@ -7,11 +7,12 @@ class Contestant(models.Model):
     name        = models.CharField(max_length = Const.CONTESTANT_NAME_MAX_LENGTH)
     gender      = models.CharField(max_length = 10)
     email       = models.EmailField(null = True)
-    grade       = models.CharField(max_length = 10)
+    grade       = models.CharField(max_length = 20)
     mobile      = models.CharField(max_length = Const.MOBILE_MAX_LENGTH)
     student_id  = models.CharField(max_length = Const.STUDENTID_MAX_LENGTH)
     class_id    = models.CharField(max_length = Const.CLASSID_MAX_LENGTH)
     school      = models.CharField(max_length = Const.SCHOOL_NAME_MAX_LENGTH)
+    info        = models.CharField(max_length = 500)
     team        = models.ForeignKey('Team')
 
     def __unicode__(self):
@@ -37,12 +38,12 @@ class Contestant(models.Model):
                 raise Exception(u'学号不合法！')
         for token in self.class_id:
             if not token in validSet:
-                raise Exception(u'班级不合法！')
+                raise Exception(u'班级不合法！(请输入10位班级编号)')
         
         # Check whether the team has been full
         members = Contestant.objects.filter(team = self.team)
-        if len(members) >= 3:
-            raise Exception(u'队伍已经满员！')
+        if len(members) >= 1:
+            raise Exception(u'您已经完善过信息了！')
 
         return True
 
@@ -66,7 +67,7 @@ class Contestant(models.Model):
                 raise Exception(u'学号不合法！')
         for token in self.class_id:
             if not token in validSet:
-                raise Exception(u'班级不合法！')
+                raise Exception(u'班级不合法！(请输入10位班级编号)')
 
         return True
 
@@ -74,6 +75,13 @@ class Contestant(models.Model):
     def getAllContestant(cls):
         return cls.objects.all()
     
+    @classmethod
+    def delAllContestant(cls):
+        try:
+            cls.objects.all().delete()
+        except Exception as e:
+            raise e
+
     @classmethod
     def getById(cls, request_id):
         return cls.objects.get(pk = request_id)
@@ -91,7 +99,7 @@ class Contestant(models.Model):
         return result
 
     @classmethod
-    def addContestant(cls, name, gender, grade, email, mobile, student_id, class_id, school, team):
+    def addContestant(cls, name, gender, grade, email, mobile, student_id, class_id, school, info, team):
         try:
             c = Contestant()
             c.name = name
@@ -102,6 +110,7 @@ class Contestant(models.Model):
             c.student_id = student_id
             c.class_id = class_id
             c.school = school
+            c.info = info
             c.team = team
             c._checkInfo()
             c.save()
@@ -109,7 +118,7 @@ class Contestant(models.Model):
         except Exception as e:
             raise e
     
-    def modifyContestant(self, name, gender, grade, email, mobile, student_id, class_id, school, team):
+    def modifyContestant(self, name, gender, grade, email, mobile, student_id, class_id, school, info, team):
         try:
             self.name = name
             self.gender = gender
@@ -119,6 +128,7 @@ class Contestant(models.Model):
             self.student_id = student_id
             self.class_id = class_id
             self.school = school
+            self.info = info
             self.team = team
             self._checkModifyInfo()
             self.save()
@@ -169,10 +179,10 @@ class Team(models.Model):
     def _checkInfo(self):
         # Check Name
         if len(self.name) < Const.TEAM_NAME_MIN_LENGTH or len(self.name) > Const.TEAM_NAME_MAX_LENGTH:
-            raise Exception(u'队伍名不合法！')
+            raise Exception(u'ID不合法！')
         for token in self.name:
             if token == ' ':
-                raise Exception(u'队伍名不能包含空格，不如用下划线代替？')
+                raise Exception(u'ID不能包含空格')
 
         flag = True
         try:
@@ -181,7 +191,7 @@ class Team(models.Model):
         except:
             pass
         if not flag:
-            raise Exception(u'队伍名已经被注册！')
+            raise Exception(u'此ID已经被注册！')
 
         # Check Raw Password
         if len(self.passwd) < Const.PASSWD_MIN_LENGTH or len(self.passwd) > Const.PASSWD_MAX_LENGTH:
@@ -212,7 +222,14 @@ class Team(models.Model):
     @classmethod
     def getAllTeams(cls):
         return cls.objects.all()
-    
+   
+    @classmethod
+    def getMaxId(cls):
+        maxx = 1
+        for t in cls.objects.all():
+            maxx = max(maxx, t.pk)
+        return maxx
+
     @classmethod
     def getPendingTeams(cls):
         return cls.objects.filter(status = 'Pending')
@@ -231,3 +248,9 @@ class Team(models.Model):
         except Exception as e:
             raise e
 
+    @classmethod
+    def delAllTeam(cls):
+        try:
+            cls.objects.all().delete()
+        except Exception as e:
+            raise e

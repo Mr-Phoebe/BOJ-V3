@@ -1,0 +1,68 @@
+{% extends "newtpl/register/base.html" %}
+{% block title %}完善信息{% endblock %}
+{% block main %}
+<div class="log-page">
+    <h1 class="form-signin-heading">完善信息<small> - <a href="{% url 'Register:team_info' target_team.pk %}">{{ target_team.name }}</a></small></h1>
+    <hr />
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td width="30%">姓名</td>
+                <td><input name="name" type="text" class="input-block-level" required autofocus></td>
+            </tr>
+            <tr>
+                <td width="30%">性别</td>
+                <td>
+                    <select name="gender" class="input-block-level">
+                        {% for option in gender_choices %}
+                        <option>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">学院</td>
+                <td>
+                    <select name="school" class="input-block-level">
+                        {% for option in school_choices %}
+                        <option>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">年级</td>
+                <td>
+                    <select name="grade" class="input-block-level">
+                        {% for option in grade_choices %}
+                        <option>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">Email</td>
+                <td><input name="email" type="text" class="input-block-level" required></td>
+            </tr>
+            <tr>
+                <td width="30%">手机</td>
+                <td><input name="mobile" type="text" class="input-block-level" maxlength="11" required></td>
+            </tr>
+            <tr>
+                <td width="30%">学号(10位数字)</td>
+                <td><input name="student_id" type="text" class="input-block-level" maxlength="10" required></td>
+            </tr>
+            <tr>
+                <td width="30%">班级(10位班号)</td>
+                <td><input name="class_id" type="text" class="input-block-level" maxlength="10" required></td>
+            </tr>
+            <tr>
+                <td width="30%">个人简单介绍（相关学科成绩，算法和语言基础，获奖情况，做题量等）</td>
+                <td><input name="info" type="text" class="input-block-level" minHeight="300px" maxlength="500"></td>
+            </tr>
+        </table>
+        <button class="btn btn-large btn-warning" type="submit">确定</button>
+    </form>
+</div>
+{% endblock %}

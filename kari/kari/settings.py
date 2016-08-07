@@ -178,7 +178,7 @@ INSTALLED_APPS = (
     'Register',
     #'Fresh',
     'Print',
-    #'debug_toolbar',
+    'debug_toolbar',
 )
 INTERNAL_IPS = ('127.0.0.1', '10.105.240.51','10.205.24.180','10.205.24.161',)
 
