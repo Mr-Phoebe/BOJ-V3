@@ -1,4 +1,0 @@
-USE oj;
-SELECT id, name FROM Register_team ORDER BY id;
-SELECT name, grade, team_id FROM Register_contestant ORDER BY team_id;
-
