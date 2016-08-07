@@ -1,19 +1,24 @@
 # BUPT Online Judge V2
-<P style="text-indent:2em;">
-ACM/ICPC在线判决系统（Online Judge System）最初源于美国，是伴随ACM国际大学生程序设计竞赛而逐步发展和推广起来的。早期（本世纪前）仅仅用于对竞赛过程中提交原代码程序的判题目的。随着高校计算机专业/非专业开设的涉及软件编码实践环节的教学及考核难度的增加，ACM/ICPC在线判决系统也被广泛应用的教学课程当中，实现实时、自动、公正、公平的软件编码实践环节的教学及考核。从2001年以来，国内诸如浙江大学、北京大学、中山大学等著名高校相继自主开发了ACM/ICPC在线判决系统，一方面用于平时ACM集训队的训练，另一方面也用于日常的软件编码实践环节的教学及考核。
-这些高校通过上述的实践，逐步认可了该系统对实践教学的促进、便利、公平和及时的特点，投入巨大的资源开发、完善、维护这类系统。北京大学信息学院的本科教学中已完全利用自主开发的POJ进行全程的软件编码实践教学，清华大学、北京大学和我校的研究生复试也都使用该系统来测试考生的编程能力。
-</P>
-<P style="text-indent:2em;">
-开发ACM/ICPC在线判决系统的意义在于两个方面：
-</P>
-<P style="text-indent:4em;">
-（1）	ACM/ICPC训练队的竞赛水平大幅度提高
-拥有自主开发的ACM/ICPC在线判决系统的学校可以利用开放竞赛的功能，轻易获得来自全世界的共享程序源代码、解题报告、标准解题程序原代码及全套测试数据。这些内容对于任何一个大学的ACM国际大学生程序设计训练队的提高是至关重要的原材料。
-</P>
-<P style="text-indent:4em;">
-（2） 直接服务于课程教学实验，提高学生自主编程能力
-借助于ACM/ICPC在线判决系统，实时判题、防作弊、事后的考核数据归纳、汇总等棘手的问题可以全部得到解决。通过在线题库的锻炼，学生的编程实践能力将得到极大提高，学习的主动性、独立性增强，而教师判题、分析数据的工作量明显降低。
-</P>
-<P style="text-indent:4em;">
-ACM/ICPC在线判决系统已在国内高校大量普及，应用面越来越广。拥有一个与自身学校教学情况相匹配的判决系统，对于教学工作的开展和学生能力的提高有很大的促进作用。
-</P>
+## Introduction
+An online judge is an online system to test programs in programming contests. They are also used to practice for such contests. Many of these systems organize their own contests.  
+The system can compile and execute code, and test them with pre-constructed data. Submitted code may be run with restrictions, including time limit, memory limit, security restriction and so on. The output of the code will be captured by the system, and compared with the standard output. The system will then return the result. When mistakes were found in a standard output, rejudgement using the same method must be made. Many of the online judges are done by hand or locals.  
+Online Judges have ranklists showing users with the biggest number of accepted solutions and shortest execution time for a particular problem.  
+## Requirement
+>amqp==1.4.6  
+anyjson==0.3.3  
+billiard==3.3.0.20  
+celery==3.1.18  
+Django==1.7  
+django-ckeditor==4.4.7  
+django-debug-toolbar==1.3.0  
+django-mysql==0.1.9  
+djangorestframework==3.1.1  
+kombu==3.0.26  
+MySQL-python==1.2.5  
+pika==0.9.14  
+python-memcached==1.54  
+pytz==2015.2  
+six==1.9.0  
+sqlparse==0.1.15  
+urllib3==1.10.3  
+uWSGI==2.0.10  
