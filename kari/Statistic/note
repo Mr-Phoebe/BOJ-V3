@@ -1,0 +1,35 @@
+statistic:
+
+models.py
+
+basic:
+
+key				type		default
+
+id				int			auto_field
+contest			contest		foriegn_key(Contest.Contest)
+user			user		foriegn_key(User.Cser)
+status			text		json[Submission info(idx, time, status, score)]
+
+
+
+method:
+
+//encode(Statistic)
+
+//decode(Statistic)
+
+getById()
+
+getByContestAndUser(Contest,User)
+
+addUserIntoContest(User, Contest)
+
+removeUserFromContest(User, Contest)
+
+updateUserInContest(User,Contest,Status)
+
+init(Contest)
+
+
+
