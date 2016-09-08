@@ -1,4 +1,4 @@
-# BUPT Online Judge V2
+# BUPT Online Judge V3
 ## Introduction
 An online judge is an online system to test programs in programming contests. They are also used to practice for such contests. Many of these systems organize their own contests.  
 The system can compile and execute code, and test them with pre-constructed data. Submitted code may be run with restrictions, including time limit, memory limit, security restriction and so on. The output of the code will be captured by the system, and compared with the standard output. The system will then return the result. When mistakes were found in a standard output, rejudgement using the same method must be made. Many of the online judges are done by hand or locals.  
