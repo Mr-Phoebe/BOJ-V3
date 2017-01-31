@@ -6,3 +6,10 @@ docs
 note_prob_table
 add_list
 framework
+diff
+ce
+src
+Makefile
+*.so
+*.out
+
